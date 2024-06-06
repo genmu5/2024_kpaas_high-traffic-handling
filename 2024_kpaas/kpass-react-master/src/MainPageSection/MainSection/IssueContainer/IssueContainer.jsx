@@ -14,7 +14,7 @@ const Container = styled.div`
 const IssueContainer = () => {
     return (
         <Container>
-            <h1>IssueContainer</h1>
+            <h1>Issue</h1>
         </Container>
     );
 };
