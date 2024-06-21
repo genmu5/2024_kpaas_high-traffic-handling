@@ -22,11 +22,7 @@ const TableCell = styled.td`
     }
 `;
 
-const HeadTable = (onItemClick) => {
-    const handleItemClick = (item) => {
-        console.log(`Clicked on ${item}`);
-    };
-
+const HeadTable = ({ onItemClick }) => {
     return (
         <TableContainer>
             <StyledTable>

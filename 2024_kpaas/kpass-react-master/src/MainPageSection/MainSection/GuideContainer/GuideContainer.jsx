@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import HeadTable from "./HeadTable";
 
@@ -43,6 +43,8 @@ const GuideContainer = () => {
                 return <p>황사에 대한 가이드 내용</p>;
             case '한파':
                 return <p>한파에 대한 가이드 내용</p>;
+            default:
+                return <p>가이드를 선택해주세요.</p>;
         }
     };
 
