@@ -22,9 +22,14 @@ const GuideContainer = () => {
     const renderGuide = () => {
         switch (selectedTopic) {
             case '침수':
-                return <p>침수에 대한 가이드 내용</p>;
+                return(
+                    <div>
+                        <img src={process.env.PUBLIC_URL + "/images/국민행동요령_침수_지하.jpg"} alt="침수_지하_행동강령" style={{ width: '100%', height: 'auto' }} />
+                        <img src={process.env.PUBLIC_URL + "/images/국민행동요령_침수_차량.jpg"} alt="침수_차량_행동강령" style={{ width: '100%', height: 'auto' }} />
+                    </div>
+                );
             case '태풍':
-                return <p>태풍에 대한 가이드 내용</p>;
+                return <img src={process.env.PUBLIC_URL + "/images/국민행동요령_태풍호우.jpg"} alt="태풍행동강령" style={{ width: '100%', height: 'auto' }} />;
             case '지진':
                 return <p>지진에 대한 가이드 내용</p>;
             case '홍수':
@@ -50,8 +55,8 @@ const GuideContainer = () => {
 
     return (
         <Container>
-            <h1>GuideContainer</h1>
-            <HeadTable onItemClick={handleItemClick} />
+            <h1>재난 가이드</h1>
+            <HeadTable onItemClick={handleItemClick}/>
             <div>
                 {renderGuide()}
             </div>
