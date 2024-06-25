@@ -12,6 +12,7 @@ const StyledTable = styled.table`
 `;
 
 const TableCell = styled.td`
+    width: 25%;
     padding: 10px;
     border: 1px solid #ddd;
     text-align: center;
@@ -34,16 +35,16 @@ const HeadTable = ({ onItemClick }) => {
                     <TableCell onClick={() => onItemClick('홍수')}>홍수</TableCell>
                 </tr>
                 <tr>
-                    <TableCell onClick={() => onItemClick('호우')}>호우</TableCell>
+                    <TableCell onClick={() => onItemClick('대설')}>대설</TableCell>
                     <TableCell onClick={() => onItemClick('낙뢰')}>낙뢰</TableCell>
                     <TableCell onClick={() => onItemClick('해일')}>해일</TableCell>
-                    <TableCell onClick={() => onItemClick('대설')}>대설</TableCell>
+                    <TableCell onClick={() => onItemClick('한파')}>한파</TableCell>
                 </tr>
                 <tr>
                     <TableCell onClick={() => onItemClick('폭염')}>폭염</TableCell>
-                    <TableCell onClick={() => onItemClick('황사')}>황사</TableCell>
-                    <TableCell onClick={() => onItemClick('대설')}>대설</TableCell>
-                    <TableCell onClick={() => onItemClick('한파')}>한파</TableCell>
+                    <TableCell onClick={() => onItemClick('가뭄')}>가뭄</TableCell>
+                    <TableCell onClick={() => onItemClick('우주물체 추락_충돌')}>우주물체 추락</TableCell>
+                    <TableCell onClick={() => onItemClick('우주전파')}>우주전파</TableCell>
                 </tr>
                 </tbody>
             </StyledTable>
