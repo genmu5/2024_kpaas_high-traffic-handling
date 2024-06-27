@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import HeadTable from "./HeadTable";
 
@@ -22,34 +22,48 @@ const GuideContainer = () => {
     const renderGuide = () => {
         switch (selectedTopic) {
             case '침수':
-                return <p>침수에 대한 가이드 내용</p>;
+                return(
+                    <div>
+                        <img src={process.env.PUBLIC_URL + "/images/국민행동요령_침수_지하.jpg"} alt="침수_지하_행동강령" style={{ width: '100%', height: 'auto' }} />
+                        <img src={process.env.PUBLIC_URL + "/images/국민행동요령_침수_차량.jpg"} alt="침수_차량_행동강령" style={{ width: '100%', height: 'auto' }} />
+                    </div>
+                );
             case '태풍':
-                return <p>태풍에 대한 가이드 내용</p>;
+                return <img src={process.env.PUBLIC_URL + "/images/국민행동요령_태풍호우.jpg"} alt="태풍행동강령" style={{ width: '100%', height: 'auto' }} />;
             case '지진':
-                return <p>지진에 대한 가이드 내용</p>;
+                return <img src={process.env.PUBLIC_URL + "/images/지진.png"} alt="지진행동강령" style={{ width: '100%', height: 'auto' }} />;
             case '홍수':
-                return <p>홍수에 대한 가이드 내용</p>;
-            case '호우':
-                return <p>호우에 대한 가이드 내용</p>;
-            case '낙뢰':
-                return <p>낙뢰에 대한 가이드 내용</p>;
-            case '해일':
-                return <p>해일에 대한 가이드 내용</p>;
+                return <img src={process.env.PUBLIC_URL + "/images/홍수.png"} alt="홍수행동강령" style={{ width: '100%', height: 'auto' }} />;
             case '대설':
-                return <p>대설에 대한 가이드 내용</p>;
+                return <img src={process.env.PUBLIC_URL + "/images/대설.jpg"} alt="대설행동강령" style={{ width: '100%', height: 'auto' }} />;
+            case '낙뢰':
+                return <img src={process.env.PUBLIC_URL + "/images/낙뢰.png"} alt="낙뢰행동강령" style={{ width: '100%', height: 'auto' }} />;
+            case '해일':
+                return <img src={process.env.PUBLIC_URL + "/images/해일.png"} alt="해일행동강령" style={{ width: '100%', height: 'auto' }} />;
+            case '우주물체 추락_충돌':
+                return <img src={process.env.PUBLIC_URL + "/images/우주물체.png"} alt="우주물체 추락_충돌행동강령" style={{ width: '100%', height: 'auto' }} />;
             case '폭염':
-                return <p>폭염에 대한 가이드 내용</p>;
-            case '황사':
-                return <p>황사에 대한 가이드 내용</p>;
+                return <img src={process.env.PUBLIC_URL + "/images/폭염.png"} alt="폭염행동강령" style={{ width: '100%', height: 'auto' }} />;
             case '한파':
-                return <p>한파에 대한 가이드 내용</p>;
+                return <img src={process.env.PUBLIC_URL + "/images/한파.jpg"} alt="한파행동강령" style={{ width: '100%', height: 'auto' }} />;
+            case '가뭄':
+                return <img src={process.env.PUBLIC_URL + "/images/가뭄.png"} alt="가뭄행동강령" style={{ width: '100%', height: 'auto' }} />;
+            case '우주전파':
+                return (
+                    <div>
+                        <img src={process.env.PUBLIC_URL + "/images/우주전파_1.png"} alt="우주전파행동강령" style={{ width: '100%', height: 'auto' }} />;
+                        <img src={process.env.PUBLIC_URL + "/images/우주전파_2.png"} alt="우주전파행동강령" style={{ width: '100%', height: 'auto' }} />;
+                    </div>
+                );
+            default:
+                return <p>가이드를 선택해주세요.</p>;
         }
     };
 
     return (
         <Container>
-            <h1>GuideContainer</h1>
-            <HeadTable onItemClick={handleItemClick} />
+            <h1>재난 가이드</h1>
+            <HeadTable onItemClick={handleItemClick}/>
             <div>
                 {renderGuide()}
             </div>
