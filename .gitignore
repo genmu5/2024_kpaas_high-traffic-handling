@@ -1,0 +1,13 @@
+
+# 환경 설정 파일
+2024_kpaas/kpass-react-master/.env
+2024_kpaas/kpass-spring-master/src/main/resources/application.yml
+
+#  버전 관리에서 제외
+.idea/
+node_modules/
+.gradle/
+build/
+.env
+*.yml
+
