@@ -1,68 +1,30 @@
-package com.example.kpass.entity.dto;
+package com.example.kpass.postmanagement.entity.dto;
 
-import com.example.kpass.entity.Member;
-import com.example.kpass.entity.Post;
-import com.example.kpass.entity.Region;
+import com.example.kpass.postmanagement.entity.Post;
+import com.example.kpass.postmanagement.entity.Region;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
+@Getter
+@AllArgsConstructor
 public class PostResponseDto {
-    private UUID postUUID;
+    private long postId;
     private String title;
     private String content;
-    private int likeCount;
+    private long likeCount;
     private Region region;
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-
-    public PostResponseDto(UUID postUUID, String title, String content, int likeCount, Region region, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.postUUID = postUUID;
-        this.title = title;
-        this.content = content;
-        this.likeCount = likeCount;
-        this.region = region;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
 
     public static PostResponseDto fromEntity(Post post) {
         return new PostResponseDto(
-                post.getPostUUID(),
+                post.getPostId(),
                 post.getTitle(),
                 post.getContent(),
                 post.getLikeCount(),
                 post.getRegion(),
-                post.getCreatedAt(),
-                post.getUpdatedAt()
+                post.getCreatedAt()
         );
-    }
-
-    public UUID getPostUUID() {
-        return postUUID;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public int getLikeCount() {
-        return likeCount;
-    }
-
-    public Region getRegion() {
-        return region;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
     }
 }

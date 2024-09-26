@@ -2,7 +2,6 @@ package com.example.kpass.controller;
 
 import com.example.kpass.entity.dto.PostRequestDto;
 import com.example.kpass.entity.dto.PostResponseDto;
-import com.example.kpass.service.PostService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

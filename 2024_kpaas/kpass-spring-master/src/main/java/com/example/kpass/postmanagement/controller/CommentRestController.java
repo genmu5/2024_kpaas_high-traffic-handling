@@ -2,7 +2,6 @@ package com.example.kpass.controller;
 
 import com.example.kpass.entity.dto.CommentRequestDto;
 import com.example.kpass.entity.dto.CommentResponseDto;
-import com.example.kpass.service.CommentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

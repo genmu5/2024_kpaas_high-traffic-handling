@@ -18,6 +18,7 @@ import java.util.List;
 public class Post {
     @Id
     @Column(name = "post_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
 
     @Column(name = "user_id")
@@ -28,6 +29,9 @@ public class Post {
 
     @Column(name = "content")
     private String content;
+
+    @Column(name = "like_count")
+    private long likeCount;
 
     @OneToMany(mappedBy = "Post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;

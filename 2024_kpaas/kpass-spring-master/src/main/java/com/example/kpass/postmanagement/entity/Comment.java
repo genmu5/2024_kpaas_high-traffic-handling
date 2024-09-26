@@ -17,6 +17,8 @@ import java.util.UUID;
 @NoArgsConstructor
 public class Comment {
     @Id
+    @Column(name = "comment_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentId;
 
     @ManyToOne(fetch = FetchType.LAZY)
