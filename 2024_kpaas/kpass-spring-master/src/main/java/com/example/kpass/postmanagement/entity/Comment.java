@@ -1,62 +1,31 @@
-package com.example.kpass.entity;
+package com.example.kpass.postmanagement.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Entity
+@Getter
+@Setter
+@Table(name = "comments")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Comment {
-    private final Long commentId;
-    private final UUID commentUUID;
-    private final Long postId;
+    @Id
+    private Long commentId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
+    private Post post;
+
+    @Column(name = "content")
     private String content;
-    private int likeCount;
-    private final LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
-    public Comment(Long commentId, UUID commentUUID, Long postId, String content, int likeCount, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.commentId = commentId;
-        this.commentUUID = commentUUID;
-        this.postId = postId;
-        this.content = content;
-        this.likeCount = likeCount;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
-
-    public Long getCommentId() {
-        return commentId;
-    }
-
-    public UUID getCommentUUID() {
-        return commentUUID;
-    }
-
-    public Long getPostId() {
-        return postId;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public int getLikeCount() {
-        return likeCount;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    public void setLikeCount(int likeCount) {
-        this.likeCount = likeCount;
-        this.updatedAt = LocalDateTime.now();
-    }
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 }

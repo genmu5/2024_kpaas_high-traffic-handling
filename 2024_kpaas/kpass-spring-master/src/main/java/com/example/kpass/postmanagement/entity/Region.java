@@ -1,4 +1,4 @@
-package com.example.kpass.entity;
+package com.example.kpass.postmanagement.entity;
 
 public enum Region {
     서울특별시,
