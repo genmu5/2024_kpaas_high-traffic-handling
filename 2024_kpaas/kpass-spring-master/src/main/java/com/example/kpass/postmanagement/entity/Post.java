@@ -33,7 +33,7 @@ public class Post {
     @Column(name = "like_count")
     private long likeCount;
 
-    @OneToMany(mappedBy = "Post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
     @Column(name = "region")

@@ -2,7 +2,9 @@ package com.example.kpass.postmanagement.repository;
 
 import com.example.kpass.postmanagement.entity.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 //    Comment insertComment(Comment comment);
 //    Comment updateComment(Comment comment);
