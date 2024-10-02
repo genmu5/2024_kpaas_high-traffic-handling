@@ -1,23 +1,13 @@
-//package com.example.kpass.entity.dto;
-//
-//import com.fasterxml.jackson.annotation.JsonInclude;
-//
-//import java.util.UUID;
-//
-//public class CommentRequestDto {
-//    private String content;
-//    private int likeCount;
-//
-//    public CommentRequestDto(String content, int likeCount) {
-//        this.content = content;
-//        this.likeCount = likeCount;
-//    }
-//
-//    public String getContent() {
-//        return content;
-//    }
-//
-//    public int getLikeCount() {
-//        return likeCount;
-//    }
-//}
+package com.example.kpass.postmanagement.entity.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+public class CommentRequestDto {
+    private Long postId;
+    private String content;
+}
