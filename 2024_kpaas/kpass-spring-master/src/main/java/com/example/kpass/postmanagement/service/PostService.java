@@ -6,6 +6,8 @@ import com.example.kpass.postmanagement.entity.dto.PostResponseDto;
 import com.example.kpass.postmanagement.repository.PostRepository;
 import com.example.kpass.sociallogin.entity.UserEntity;
 import com.example.kpass.sociallogin.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -49,6 +51,10 @@ public class PostService {
     public PostResponseDto getPostByPostId(Long postId) {
         Post post = postRepository.findPostByPostId(postId).orElseThrow(() -> new RuntimeException("Post not found"));
         return PostResponseDto.fromEntity(post);
+    }
+
+    public Page<PostResponseDto> getAllPosts(Pageable pageable) {
+        return postRepository.findAll(pageable).map(PostResponseDto::fromEntity);
     }
 
 }

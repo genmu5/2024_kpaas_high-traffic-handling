@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import SearchBar from "./SearchBar";
 import PostRow from "./PostRow";
@@ -10,76 +10,82 @@ const Container = styled.div`
     justify-content: start;
 `;
 
-const Pagination = styled.div`
-    display: flex;
-    justify-content: center;
+const LoadingMessage = styled.p`
+    text-align: center;
     margin-top: 20px;
 `;
 
-const PageButton = styled.button`
-    margin: 0 5px;
-    padding: 5px 10px;
-    border: none;
-    background-color: #f0f0f0;
-    cursor: pointer;
-
-    &:disabled {
-        cursor: not-allowed;
-        opacity: 0.5;
-    }
+const EndMessage = styled.p`
+    text-align: center;
+    margin-top: 20px;
 `;
 
 const PostListContainer = () => {
     const [posts, setPosts] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage] = useState(9);
+    const [page, setPage] = useState(0);
+    const [hasMore, setHasMore] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const postsPerPage = 9;
 
-    const fetchPosts = async () => {
+    const fetchPosts = useCallback(async (page) => {
+        setLoading(true);
         try {
-            const response = await executeGetAllPosts();
+            const response = await executeGetAllPosts(page, postsPerPage);
             if (response.status === 200) {
-                const sortedPosts = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-                setPosts(sortedPosts);
+                const { content } = response.data;
+                if (Array.isArray(content)) {
+                    // 중복되지 않는 포스트만 추가
+                    setPosts((prevPosts) => {
+                        const newPosts = content.filter(
+                            (post) => !prevPosts.some((p) => p.postId === post.postId)
+                        );
+                        return [...prevPosts, ...newPosts];
+                    });
+                    setHasMore(!response.data.last); // 마지막 페이지인지 확인
+                } else {
+                    console.error("응답 데이터가 배열 형식이 아닙니다.");
+                }
             }
         } catch (error) {
-            console.error("Error fetching posts:", error);
+            console.error("게시물을 가져오는 중 오류가 발생했습니다:", error);
+        } finally {
+            setLoading(false);
         }
-    };
+    }, [postsPerPage]);
 
     useEffect(() => {
-        fetchPosts();
-    }, []);
+        // 페이지가 변경될 때마다 fetchPosts 호출
+        fetchPosts(page);
+    }, [fetchPosts, page]);
 
-    // Get current posts
-    const indexOfLastPost = currentPage * postsPerPage;
-    const indexOfFirstPost = indexOfLastPost - postsPerPage;
-    const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+    const handleScroll = useCallback(() => {
+        if (
+            window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight &&
+            hasMore &&
+            !loading
+        ) {
+            setPage((prevPage) => prevPage + 1);
+        }
+    }, [hasMore, loading]);
 
-    // Change page
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+    useEffect(() => {
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, [handleScroll]);
 
     return (
         <Container>
             <SearchBar />
-            {currentPosts.map((post) => (
+            {posts.map((post, index) => (
                 <PostRow
-                    key={post.postUUID}
+                    key={`${post.postId}-${index}`} // 고유한 키를 위해 인덱스를 추가
                     region={post.region}
                     title={post.title}
                     createdAt={post.createdAt}
                 />
             ))}
-            <Pagination>
-                {[...Array(Math.ceil(posts.length / postsPerPage)).keys()].map(number => (
-                    <PageButton
-                        key={number + 1}
-                        onClick={() => paginate(number + 1)}
-                        disabled={currentPage === number + 1}
-                    >
-                        {number + 1}
-                    </PageButton>
-                ))}
-            </Pagination>
+            {loading && <LoadingMessage>Loading...</LoadingMessage>}
+            {!hasMore && <EndMessage>No more posts available</EndMessage>}
         </Container>
     );
 };
