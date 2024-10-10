@@ -123,101 +123,6 @@ import { useRecoilValue } from 'recoil';
 import useCurrentLocation from '../../../hooks/useCurrentLocation';
 import { currentLocationAtom } from '../../../state/currentLocationAtom';
 
-// 지진 대피소 데이터
-const earthquakeShelters = [
-    {
-        "name": "현대빌딩 본관 지하2층",
-        "address": "서울특별시 종로구 율곡로 75, 현대빌딩 (계동)",
-        "capacity": 6460,
-        "lat": 37.57747341738085,
-        "lng": 126.98751965704349
-    },
-    {
-        "name": "대동세무고등학교 본관 지하1층",
-        "address": "서울특별시 종로구 계동길 84-10, 대동세무고등학교 (계동)",
-        "capacity": 222,
-        "lat": 37.58105628545779,
-        "lng": 126.9874826001711
-    },
-    {
-        "name": "서울농학교 청각언어훈련센터 지하1층",
-        "address": "서울특별시 종로구 필운대로 103, 국립서울농학교 청각언어훈련센터동 지하1층 (신교동)",
-        "capacity": 240,
-        "lat": 37.58413718522873,
-        "lng": 126.96884140648686
-    },
-    {
-        "name": "서울맹학교 초등교육관 지하1층",
-        "address": "서울특별시 종로구 필운대로 97, 국립서울맹학교 초등교육관동 지하1층 (신교동)",
-        "capacity": 378,
-        "lat": 37.584199645777986,
-        "lng": 126.96822659927734
-    },
-    {
-        "name": "청운효자동주민센터 지하1층",
-        "address": "서울특별시 종로구 자하문로 92, 청운효자동주민센터 지하1층 (궁정동)",
-        "capacity": 177,
-        "lat": 37.584046217936724,
-        "lng": 126.97061436144106
-    },
-    {
-        "name": "유림회관 지하1층",
-        "address": "서울특별시 종로구 성균관로 31 (명륜3가, 유림회관)",
-        "capacity": 3829,
-        "lat": 37.58555951495042,
-        "lng": 126.99684028752559
-    },
-    {
-        "name": "구기터널",
-        "address": "서울특별시 종로구 진흥로 419, 구기터널관리사무소 (구기동)",
-        "capacity": 2158,
-        "lat": 37.60878995094593,
-        "lng": 126.95553788094333
-    },
-    {
-        "name": "서울대학교병원 융합의학기술원(정림빌딩)지하2층 강당",
-        "address": "서울특별시 종로구 율곡로 214 (연건동, 정림빌딩)",
-        "capacity": 490,
-        "lat": 37.575940762389344,
-        "lng": 127.00263963295401
-    },
-    {
-        "name": "창신2동주민센터 지하1층",
-        "address": "서울특별시 종로구 창신길 62 (창신동, 창신제2동주민센터)",
-        "capacity": 309,
-        "lat": 37.57440128293274,
-        "lng": 127.01078907130506
-    },
-    {
-        "name": "창신2동 동대문맨션 지하1층",
-        "address": "서울특별시 종로구 창신길 20 (창신동, 동대문맨션)",
-        "capacity": 253,
-        "lat": 37.57247163953407,
-        "lng": 127.01077666363857
-    },
-    {
-        "name": "우리은행창신동지점 지하1층",
-        "address": "서울특별시 종로구 종로 311 (창신동, (주)우리은행창신동지점)",
-        "capacity": 160,
-        "lat": 37.572209721406836,
-        "lng": 127.01227833594984
-    },
-    {
-        "name": "지하철3호선 안국역 지하1~3층 대합실 승강장",
-        "address": "서울특별시 종로구 율곡로 지하62, 3호선 안국역 (안국동)",
-        "capacity": 12652,
-        "lat": 37.57677456605093,
-        "lng": 126.98608594405776
-    },
-    {
-        "name": "극동문제연구소 통일관 지하2층 주차장",
-        "address": "서울특별시 종로구 북촌로15길 2, 극동문제연구소/통일관 지하2층 (삼청동)",
-        "capacity": 910,
-        "lat": 37.586652412965506,
-        "lng": 126.98353796143849
-    }
-];
-
 const icons = [
     { id: 1, name: '산사태 대피소', icon: '🏔️' },
     { id: 2, name: '화학사고 대피소', icon: '🧪' },
@@ -233,7 +138,7 @@ const ShelterContainer = () => {
     const [shelters, setShelters] = useState([]);
     const [activeIcon, setActiveIcon] = useState(null);
     const markersRef = useRef([]);
-    const [activeInfoWindows, setActiveInfoWindows] = useState([]); // 활성화된 정보창 저장용
+    const [activeInfoWindows, setActiveInfoWindows] = useState([]);
 
     useEffect(() => {
         const naverMapClientId = process.env.REACT_APP_NAVER_MAP_CLIENT_ID;
@@ -245,7 +150,7 @@ const ShelterContainer = () => {
 
         script.onload = () => {
             if (window.naver) {
-                const defaultCenter = new window.naver.maps.LatLng(37.554722, 126.970833);
+                const defaultCenter = new window.naver.maps.LatLng(37.554722, 126.970833); // 서울역 좌표
                 mapRef.current = new window.naver.maps.Map('map', {
                     center: defaultCenter,
                     zoom: 7,
@@ -264,7 +169,7 @@ const ShelterContainer = () => {
             document.head.removeChild(script);
         };
     }, []);
-    // currentLocation 변경 시 지도를 부드럽게 이동
+
     useEffect(() => {
         if (mapRef.current && currentLocation.lat && currentLocation.lng) {
             const targetLocation = new window.naver.maps.LatLng(currentLocation.lat, currentLocation.lng);
@@ -273,9 +178,42 @@ const ShelterContainer = () => {
         }
     }, [currentLocation]);
 
-    // 마커 생성 및 제거 함수
+    const fetchShelters = async (url) => {
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error('Failed to fetch data');
+            const data = await response.json();
+            setShelters(data);
+        } catch (error) {
+            console.error('Error fetching shelter data:', error);
+        }
+    };
+
+    const handleIconClick = (iconId) => {
+        if (iconId === activeIcon) {
+            setActiveIcon(null);
+            toggleMarkers([]); // 활성화된 아이콘을 다시 클릭 시 마커 및 정보창 제거
+        } else {
+            setActiveIcon(iconId);
+            let apiUrl = '';
+
+            // 아이콘 ID에 따라 API URL 설정
+            switch (iconId) {
+                case 1: apiUrl = '/api/shelters/landslide'; break;
+                case 2: apiUrl = '/api/shelters/chemical'; break;
+                case 3: apiUrl = '/api/shelters/civil-defense'; break;
+                case 4: apiUrl = '/api/shelters/disaster-victims'; break;
+                case 5: apiUrl = '/api/shelters/earthquake'; break;
+                default: break;
+            }
+
+            if (apiUrl) {
+                fetchShelters(apiUrl);
+            }
+        }
+    };
+
     const toggleMarkers = (shelterData) => {
-        // 기존 마커와 정보창을 모두 제거
         markersRef.current.forEach(marker => marker.setMap(null));
         activeInfoWindows.forEach(infoWindow => infoWindow.close());
         markersRef.current = [];
@@ -299,37 +237,18 @@ const ShelterContainer = () => {
                     `,
                 });
 
-                // 마커 클릭 이벤트 리스너
                 window.naver.maps.Event.addListener(marker, 'click', () => {
                     if (infoWindow.getMap()) {
-                        infoWindow.close(); // 이미 열려있다면 닫기
+                        infoWindow.close();
                     } else {
-                        // 기존에 열려있던 다른 정보창 닫기
                         activeInfoWindows.forEach(activeInfo => activeInfo.close());
-                        setActiveInfoWindows([infoWindow]); // 현재 정보창 저장
-                        infoWindow.open(mapRef.current, marker); // 정보창 열기
+                        setActiveInfoWindows([infoWindow]);
+                        infoWindow.open(mapRef.current, marker);
                     }
                 });
 
                 markersRef.current.push(marker);
             });
-        }
-    };
-
-    // 아이콘 클릭 시 대피소 데이터를 설정 및 마커 표시/제거
-    const handleIconClick = (iconId) => {
-        if (iconId === activeIcon) {
-            setActiveIcon(null);
-            toggleMarkers([]); // 활성화된 아이콘을 다시 클릭 시 마커 및 정보창 제거
-        } else {
-            setActiveIcon(iconId);
-            if (iconId === 5) {
-                setShelters(earthquakeShelters);
-                toggleMarkers(earthquakeShelters);
-            } else {
-                setShelters([]);
-                toggleMarkers([]);
-            }
         }
     };
 
@@ -360,4 +279,3 @@ const ShelterContainer = () => {
 };
 
 export default ShelterContainer;
-
