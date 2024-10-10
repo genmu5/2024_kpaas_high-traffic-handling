@@ -15,8 +15,7 @@ function App() {
             <Router>
                 <Routes>
                     <Route path='/' element={<MainPage />}/>
-                    {/* HomePage와 SocialLoginPage 경로 추가 */}
-                    <Route path="/home" element={<HomePage />} />
+                    {/* HomePage 경로 추가 */}
                     <Route path="/login" element={<SocialLoginPage />} />
                 </Routes>
             </Router>
