@@ -31,6 +31,12 @@ dependencies {
 
     // Spring Security 기본 의존성
     implementation 'org.springframework.boot:spring-boot-starter-security'
+//    // 스케줄링 관련 의존성 (버전 생략)
+//    implementation 'org.springframework.boot:spring-boot-starter-scheduling'
+
+    //액셀파일 관련
+    implementation 'org.apache.poi:poi:5.2.3' // HSSF (XLS) 포맷을 지원
+    implementation 'org.apache.poi:poi-ooxml:5.2.3' // XSSF (XLSX) 포맷을 지원
 
     // OAuth2 Client 의존성
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
@@ -44,10 +50,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'com.mysql:mysql-connector-j'
     implementation 'mysql:mysql-connector-java:8.0.32'
-
-    //
-    implementation 'org.apache.poi:poi:5.0.0'
-    implementation 'org.apache.poi:poi-ooxml:5.0.0'
 
 }
 
