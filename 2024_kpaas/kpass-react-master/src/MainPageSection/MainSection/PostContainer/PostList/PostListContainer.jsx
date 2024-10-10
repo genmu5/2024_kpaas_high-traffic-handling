@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import SearchBar from "./SearchBar";
 import PostRow from "./PostRow";
+import PostForm from "./PostForm";
 import { executeGetAllPosts } from "../../../../api/AuthenticationApiService";
 
 const Container = styled.div`
@@ -10,21 +11,12 @@ const Container = styled.div`
     justify-content: start;
 `;
 
-const LoadingMessage = styled.p`
-    text-align: center;
-    margin-top: 20px;
-`;
-
-const EndMessage = styled.p`
-    text-align: center;
-    margin-top: 20px;
-`;
-
 const PostListContainer = () => {
     const [posts, setPosts] = useState([]);
     const [page, setPage] = useState(0);
     const [hasMore, setHasMore] = useState(true);
     const [loading, setLoading] = useState(false);
+    const [showForm, setShowForm] = useState(false); // 글쓰기 폼 표시 여부
     const postsPerPage = 9;
 
     const fetchPosts = useCallback(async (page) => {
@@ -34,14 +26,13 @@ const PostListContainer = () => {
             if (response.status === 200) {
                 const { content } = response.data;
                 if (Array.isArray(content)) {
-                    // 중복되지 않는 포스트만 추가
                     setPosts((prevPosts) => {
                         const newPosts = content.filter(
                             (post) => !prevPosts.some((p) => p.postId === post.postId)
                         );
                         return [...prevPosts, ...newPosts];
                     });
-                    setHasMore(!response.data.last); // 마지막 페이지인지 확인
+                    setHasMore(!response.data.last);
                 } else {
                     console.error("응답 데이터가 배열 형식이 아닙니다.");
                 }
@@ -54,38 +45,43 @@ const PostListContainer = () => {
     }, [postsPerPage]);
 
     useEffect(() => {
-        // 페이지가 변경될 때마다 fetchPosts 호출
         fetchPosts(page);
     }, [fetchPosts, page]);
 
-    const handleScroll = useCallback(() => {
-        if (
-            window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight &&
-            hasMore &&
-            !loading
-        ) {
-            setPage((prevPage) => prevPage + 1);
-        }
-    }, [hasMore, loading]);
+    const handleWriteClick = () => {
+        setShowForm(true);
+    };
 
-    useEffect(() => {
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, [handleScroll]);
+    const handleFormClose = () => {
+        setShowForm(false);
+    };
+
+    const handleFormSubmit = () => {
+        setPosts([]); // 게시글 목록 초기화
+        setPage(0); // 첫 페이지부터 다시 로드
+        fetchPosts(0);
+        setShowForm(false); // 글 작성 후 폼 닫기
+    };
 
     return (
         <Container>
-            <SearchBar />
-            {posts.map((post, index) => (
-                <PostRow
-                    key={`${post.postId}-${index}`} // 고유한 키를 위해 인덱스를 추가
-                    region={post.region}
-                    title={post.title}
-                    createdAt={post.createdAt}
-                />
-            ))}
-            {loading && <LoadingMessage>Loading...</LoadingMessage>}
-            {!hasMore && <EndMessage>No more posts available</EndMessage>}
+            {showForm ? (
+                <PostForm onClose={handleFormClose} onSubmit={handleFormSubmit} />
+            ) : (
+                <>
+                    <SearchBar onWriteClick={handleWriteClick} />
+                    {posts.map((post, index) => (
+                        <PostRow
+                            key={`${post.postId}-${index}`}
+                            region={post.region}
+                            title={post.title}
+                            createdAt={post.createdAt}
+                        />
+                    ))}
+                    {loading && <p>Loading...</p>}
+                    {!hasMore && <p>No more posts available</p>}
+                </>
+            )}
         </Container>
     );
 };

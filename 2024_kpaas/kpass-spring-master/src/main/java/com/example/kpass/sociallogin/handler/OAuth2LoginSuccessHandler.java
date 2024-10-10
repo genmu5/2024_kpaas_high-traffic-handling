@@ -21,9 +21,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         String token = jwtProvider.createToken(authentication.getName());
 
-        response.addHeader("Authorization", "Bearer " + token);
-        System.out.println("Bearer " + token);
-        //로그인 성공후 리다이렉트 될 페이지
-        response.sendRedirect("http://localhost:3000/");
+        String redirectUrl = "http://localhost:3000/login-success?token=" + token;
+        response.sendRedirect(redirectUrl);
     }
 }
