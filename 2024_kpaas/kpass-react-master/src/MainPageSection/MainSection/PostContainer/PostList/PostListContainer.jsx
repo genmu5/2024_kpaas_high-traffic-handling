@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import SearchBar from "./SearchBar";
 import PostRow from "./PostRow";
+import PostForm from "./PostForm";
 import { executeGetAllPosts } from "../../../../api/AuthenticationApiService";
 
 const Container = styled.div`
@@ -10,76 +11,77 @@ const Container = styled.div`
     justify-content: start;
 `;
 
-const Pagination = styled.div`
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-`;
-
-const PageButton = styled.button`
-    margin: 0 5px;
-    padding: 5px 10px;
-    border: none;
-    background-color: #f0f0f0;
-    cursor: pointer;
-
-    &:disabled {
-        cursor: not-allowed;
-        opacity: 0.5;
-    }
-`;
-
 const PostListContainer = () => {
     const [posts, setPosts] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [postsPerPage] = useState(9);
+    const [page, setPage] = useState(0);
+    const [hasMore, setHasMore] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const [showForm, setShowForm] = useState(false); // 글쓰기 폼 표시 여부
+    const postsPerPage = 9;
 
-    const fetchPosts = async () => {
+    const fetchPosts = useCallback(async (page) => {
+        setLoading(true);
         try {
-            const response = await executeGetAllPosts();
+            const response = await executeGetAllPosts(page, postsPerPage);
             if (response.status === 200) {
-                const sortedPosts = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-                setPosts(sortedPosts);
+                const { content } = response.data;
+                if (Array.isArray(content)) {
+                    setPosts((prevPosts) => {
+                        const newPosts = content.filter(
+                            (post) => !prevPosts.some((p) => p.postId === post.postId)
+                        );
+                        return [...prevPosts, ...newPosts];
+                    });
+                    setHasMore(!response.data.last);
+                } else {
+                    console.error("응답 데이터가 배열 형식이 아닙니다.");
+                }
             }
         } catch (error) {
-            console.error("Error fetching posts:", error);
+            console.error("게시물을 가져오는 중 오류가 발생했습니다:", error);
+        } finally {
+            setLoading(false);
         }
-    };
+    }, [postsPerPage]);
 
     useEffect(() => {
-        fetchPosts();
-    }, []);
+        fetchPosts(page);
+    }, [fetchPosts, page]);
 
-    // Get current posts
-    const indexOfLastPost = currentPage * postsPerPage;
-    const indexOfFirstPost = indexOfLastPost - postsPerPage;
-    const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+    const handleWriteClick = () => {
+        setShowForm(true);
+    };
 
-    // Change page
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+    const handleFormClose = () => {
+        setShowForm(false);
+    };
+
+    const handleFormSubmit = () => {
+        setPosts([]); // 게시글 목록 초기화
+        setPage(0); // 첫 페이지부터 다시 로드
+        fetchPosts(0);
+        setShowForm(false); // 글 작성 후 폼 닫기
+    };
 
     return (
         <Container>
-            <SearchBar />
-            {currentPosts.map((post) => (
-                <PostRow
-                    key={post.postUUID}
-                    region={post.region}
-                    title={post.title}
-                    createdAt={post.createdAt}
-                />
-            ))}
-            <Pagination>
-                {[...Array(Math.ceil(posts.length / postsPerPage)).keys()].map(number => (
-                    <PageButton
-                        key={number + 1}
-                        onClick={() => paginate(number + 1)}
-                        disabled={currentPage === number + 1}
-                    >
-                        {number + 1}
-                    </PageButton>
-                ))}
-            </Pagination>
+            {showForm ? (
+                <PostForm onClose={handleFormClose} onSubmit={handleFormSubmit} />
+            ) : (
+                <>
+                    <SearchBar onWriteClick={handleWriteClick} />
+                    {posts.map((post, index) => (
+                        <PostRow
+                            key={`${post.postId}-${index}`}
+                            region={post.region}
+                            title={post.title}
+                            createdAt={post.createdAt}
+                        />
+                    ))}
+                    {loading && <p>Loading...</p>}
+                    {!hasMore && <p>No more posts available</p>}
+                </>
+            )}
         </Container>
     );
 };

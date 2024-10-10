@@ -1,50 +1,37 @@
-//package com.example.kpass.controller;
-//
-//import com.example.kpass.entity.dto.CommentRequestDto;
-//import com.example.kpass.entity.dto.CommentResponseDto;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.*;
-//
-//import java.util.List;
-//import java.util.UUID;
-//
-//@RestController
-//@RequestMapping("/api/comments")
-//public class CommentRestController {
-//
-//    private final CommentService commentService;
-//
-//    public CommentRestController(CommentService commentService) {
-//        this.commentService = commentService;
-//    }
-//
-//    @PostMapping("/create/{postUUID}")
-//    public ResponseEntity<CommentResponseDto> createComment(@PathVariable String postUUID, @RequestBody CommentRequestDto commentRequestDto) {
-//        UUID uuid = UUID.fromString(postUUID);
-//        return ResponseEntity.ok(commentService.insertComment(uuid, commentRequestDto));
-//    }
-//
-//    @PutMapping("/update/{commentUUID}")
-//    public ResponseEntity<CommentResponseDto> updateComment(@PathVariable String commentUUID, @RequestBody CommentRequestDto commentRequestDto) {
-//        UUID uuid = UUID.fromString(commentUUID);
-//        return ResponseEntity.ok(commentService.updateComment(uuid, commentRequestDto));
-//    }
-//
-//    @DeleteMapping("/delete/{commentUUID}")
-//    public ResponseEntity<Void> deleteComment(@PathVariable String commentUUID) {
-//        UUID uuid = UUID.fromString(commentUUID);
-//        commentService.deleteComment(uuid);
-//        return ResponseEntity.noContent().build();
-//    }
-//
-//    @GetMapping
-//    public ResponseEntity<List<CommentResponseDto>> getAllComments() {
-//        return ResponseEntity.ok(commentService.findAllComments());
-//    }
-//
-//    @GetMapping("/{postUUID}")
-//    public ResponseEntity<List<CommentResponseDto>> getCommentsByPostId(@PathVariable String postUUID) {
-//        UUID uuid = UUID.fromString(postUUID);
-//        return ResponseEntity.ok(commentService.findCommentsByPostUUID(uuid));
-//    }
-//}
+package com.example.kpass.postmanagement.controller;
+
+import com.example.kpass.postmanagement.entity.dto.CommentRequestDto;
+import com.example.kpass.postmanagement.entity.dto.CommentResponseDto;
+import com.example.kpass.postmanagement.service.CommentService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/api/comments")
+public class CommentRestController {
+
+    private final CommentService commentService;
+
+    public CommentRestController(CommentService commentService) {
+        this.commentService = commentService;
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<CommentResponseDto> createComment(@RequestBody CommentRequestDto commentRequestDto) {
+        return ResponseEntity.ok(commentService.insertComment(commentRequestDto));
+    }
+
+    @DeleteMapping("/delete/{commentId}")
+    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId) {
+        commentService.deleteComment(commentId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{postId}")
+    public ResponseEntity<List<CommentResponseDto>> getCommentsByPostId(@PathVariable Long postId) {
+        return ResponseEntity.ok(commentService.findCommentsByPostId(postId));
+    }
+}

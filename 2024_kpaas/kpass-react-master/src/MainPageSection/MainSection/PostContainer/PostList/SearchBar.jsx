@@ -50,6 +50,7 @@ const WriteBox = styled.div`
     padding: 5px 10px;
     border-radius: 14px;
     background: #dff1ff;
+    cursor: pointer;
 `;
 
 const WriteText = styled.span`
@@ -58,7 +59,7 @@ const WriteText = styled.span`
     color: black;
 `;
 
-const SearchBar = () => {
+const SearchBar = ({ onWriteClick }) => {
     return (
         <Container>
             <SearchBox>
@@ -67,7 +68,7 @@ const SearchBar = () => {
                 </IconContainer>
                 <SearchText>Search</SearchText>
             </SearchBox>
-            <WriteBox>
+            <WriteBox onClick={onWriteClick}>
                 <WriteText>글쓰기</WriteText>
             </WriteBox>
         </Container>
