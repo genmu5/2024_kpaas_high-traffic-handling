@@ -42,7 +42,8 @@ public class WebSecurityConfig {
                                 request.requestMatchers(
                                                 "/",
                                                 "/api/v1/oauth2/**",
-                                                "/api/v1/posts")
+                                                "/api/v1/posts",
+                                                "/api/shelters/**")
                                         .permitAll()
                                         .requestMatchers("/api/v1/user/**")
                                         .hasRole("USER")

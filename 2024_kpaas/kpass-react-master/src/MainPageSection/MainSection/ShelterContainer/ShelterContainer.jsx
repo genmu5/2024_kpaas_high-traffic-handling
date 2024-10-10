@@ -150,6 +150,7 @@ const ShelterContainer = () => {
 
         script.onload = () => {
             if (window.naver) {
+                console.log('Naver maps script loaded');
                 const defaultCenter = new window.naver.maps.LatLng(37.554722, 126.970833); // 서울역 좌표
                 mapRef.current = new window.naver.maps.Map('map', {
                     center: defaultCenter,
@@ -178,11 +179,26 @@ const ShelterContainer = () => {
         }
     }, [currentLocation]);
 
+    useEffect(() => {
+        if (shelters.length > 0) {
+            console.log('Updating markers with shelter data:', shelters);
+            toggleMarkers(shelters);
+        }
+    }, [shelters]);
+
     const fetchShelters = async (url) => {
+        console.log('Fetching from URL:', url);
         try {
-            const response = await fetch(url);
+            const response = await fetch(url, {
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                }
+            });
             if (!response.ok) throw new Error('Failed to fetch data');
             const data = await response.json();
+            console.log('Fetched shelters data:', data);
             setShelters(data);
         } catch (error) {
             console.error('Error fetching shelter data:', error);
@@ -214,6 +230,7 @@ const ShelterContainer = () => {
     };
 
     const toggleMarkers = (shelterData) => {
+        console.log('Shelter data for markers:', shelterData);
         markersRef.current.forEach(marker => marker.setMap(null));
         activeInfoWindows.forEach(infoWindow => infoWindow.close());
         markersRef.current = [];
@@ -221,6 +238,7 @@ const ShelterContainer = () => {
 
         if (shelterData.length > 0) {
             shelterData.forEach((shelter) => {
+                console.log('Creating marker at:', shelter.lat, shelter.lng);
                 const marker = new window.naver.maps.Marker({
                     position: new window.naver.maps.LatLng(shelter.lat, shelter.lng),
                     map: mapRef.current,
@@ -279,3 +297,5 @@ const ShelterContainer = () => {
 };
 
 export default ShelterContainer;
+
+
