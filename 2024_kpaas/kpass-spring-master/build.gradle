@@ -51,6 +51,8 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     implementation 'mysql:mysql-connector-java:8.0.32'
 
+    //json parse
+    implementation 'org.jsoup:jsoup:1.15.3'
 }
 
 tasks.named('test') {

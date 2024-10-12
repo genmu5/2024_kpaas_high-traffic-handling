@@ -13,7 +13,6 @@ public class CommentResponseDto {
     private String content;
     private LocalDateTime createdAt;
 
-
     public static CommentResponseDto fromEntity(Comment comment) {
         return new CommentResponseDto(
                 comment.getCommentId(),

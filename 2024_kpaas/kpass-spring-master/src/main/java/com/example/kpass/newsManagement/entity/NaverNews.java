@@ -20,10 +20,9 @@ public class NaverNews {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String source;
     private String title;
     private String description;
     private String link;
-    private String tag;
-    private LocalDateTime createdAt;
+    private LocalDateTime pubDate;
+
 }

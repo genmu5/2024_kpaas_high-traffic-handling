@@ -8,6 +8,9 @@ const Container = styled.div`
     position: relative;
     gap: 15px;
     padding: 10px 15px;
+    padding: 10px 15px;
+    cursor: pointer;
+    border: 1px solid whitesmoke;
 `;
 
 const NewsContent = styled.div`
@@ -18,62 +21,34 @@ const NewsContent = styled.div`
     gap: 5px;
 `;
 
-const Source = styled.span`
-    font-size: 14px;
+const Title = styled.span`
+    font-size: 15px;
     text-align: left;
-    color: #5b7083;
+    font-weight: bold;
+    color: #0f1419;
 `;
 
 const Description = styled.span`
     width: 235px;
-    font-size: 15px;
-    text-align: left;
-    color: #0f1419;
-`;
-
-const MetaData = styled.div`
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 4px;
-`;
-
-const Time = styled.span`
     font-size: 14px;
     text-align: left;
     color: #5b7083;
 `;
 
-const Tag = styled.span`
-    font-size: 14px;
-    text-align: left;
-    color: #1da1f2;
-`;
+const truncateText = (text, maxLength) => {
+    if (text.length > maxLength) {
+        return `${text.substring(0, maxLength)}...`;
+    }
+    return text;
+};
 
-const ImageContainer = styled.div`
-    width: 95px;
-    height: 95px;
-`;
-
-const NewsImage = styled.img`
-    width: 95px;
-    height: 95px;
-`;
-
-const WebNews = (props) => {
+const WebNews = ({ title, description, link }) => {
     return (
-        <Container>
+        <Container onClick={() => window.open(link, "_blank")}>
             <NewsContent>
-                <Source>{props.source}</Source>
-                <Description>{props.description}</Description>
-                <MetaData>
-                    <Time>{props.time}</Time>
-                    <Tag>{props.tag}</Tag>
-                </MetaData>
+                <Title>{title}</Title>
+                <Description>{truncateText(description, 40)}</Description> {/* 최대 100글자 */}
             </NewsContent>
-            <ImageContainer>
-                <NewsImage src="image-13.png" alt="news"/>
-            </ImageContainer>
         </Container>
     );
 };

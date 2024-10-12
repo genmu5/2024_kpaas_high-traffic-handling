@@ -16,7 +16,7 @@ const HeaderContainer = () => {
         <Container>
             <HomeText/>
             <HotPosts/>
-            <BreakingNews/>
+            {/*<BreakingNews/>*/}
         </Container>
     );
 };

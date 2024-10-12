@@ -16,7 +16,7 @@ const Container = styled.div`
 const SidebarContainer = () => {
     return (
         <Container>
-            <TopicList/>
+            {/*<TopicList/>*/}
             <WebNewsList/>
         </Container>
     );
