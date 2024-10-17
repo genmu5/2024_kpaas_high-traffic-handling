@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -20,7 +21,7 @@ public class DisasterEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // 자동 생성 ID
 
-    private String createdAt; // 생성일시 (CRT_DT)
+    private LocalDateTime createdAt; // 생성일시 (CRT_DT)
     private String regionName; // 수신지역명 (RCPTN_RGN_NM)
     private String disasterType; // 재해구분명 (DST_SE_NM)
 
