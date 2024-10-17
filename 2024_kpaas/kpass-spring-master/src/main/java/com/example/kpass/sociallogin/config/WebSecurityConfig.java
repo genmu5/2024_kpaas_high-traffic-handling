@@ -45,6 +45,7 @@ public class WebSecurityConfig {
                                                 "/api/v1/posts",
                                                 "/api/v1/posts/{postId}",
                                                 "/api/shelters/**",
+                                                "/api/disasters/**",
                                                 "/api/v1/navernews/**",
                                                 "/api/v1/comments/{postId}")
                                         .permitAll()
