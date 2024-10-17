@@ -31,6 +31,7 @@ public class CommentService {
                 LocalDateTime.now()
         );
         commentRepository.save(comment);
+        System.out.println(comment);
         return CommentResponseDto.fromEntity(comment);
     }
 

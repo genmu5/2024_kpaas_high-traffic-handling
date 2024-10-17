@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import search_icon from '../../../../images/search_icon.png';
 
@@ -34,12 +34,12 @@ const IconContainer = styled.div`
     padding: 2px;
 `;
 
-const SearchText = styled.span`
-    flex-grow: 0;
-    flex-shrink: 0;
+const SearchInput = styled.input`
+    flex-grow: 1;
     font-size: 16px;
-    text-align: left;
-    color: #5b7083;
+    border: none;
+    outline: none;
+    background: transparent;
 `;
 
 const WriteBox = styled.div`
@@ -59,14 +59,26 @@ const WriteText = styled.span`
     color: black;
 `;
 
-const SearchBar = ({ onWriteClick }) => {
+const SearchBar = ({ onWriteClick, onSearch }) => {
+    const [searchQuery, setSearchQuery] = useState("");
+
+    const handleSearchInputChange = (event) => {
+        setSearchQuery(event.target.value);
+        onSearch(event.target.value);  // 검색어가 바뀔 때마다 상위 컴포넌트로 전달
+    };
+
     return (
         <Container>
             <SearchBox>
                 <IconContainer>
-                    <img src={search_icon} alt="like_icon" width={'15px'} height={'15px'}/>
+                    <img src={search_icon} alt="search_icon" width={'15px'} height={'15px'}/>
                 </IconContainer>
-                <SearchText>Search</SearchText>
+                <SearchInput
+                    type="text"
+                    placeholder="검색어를 입력하세요"
+                    value={searchQuery}
+                    onChange={handleSearchInputChange}
+                />
             </SearchBox>
             <WriteBox onClick={onWriteClick}>
                 <WriteText>글쓰기</WriteText>

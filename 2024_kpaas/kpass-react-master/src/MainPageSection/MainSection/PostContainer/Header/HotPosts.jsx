@@ -2,17 +2,14 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div`
-    display: flex;
-    justify-content: space-between;
-    padding: 0 20px 0 20px;
 `;
 
 const DateTimeContainer = styled.div`
     display: flex;
-    flex-direction: column;
+    //flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 20px;
+    gap: 30px;
 `;
 
 const DateText = styled.span`
@@ -135,21 +132,21 @@ const HotPosts = () => {
                 <DateText>{formatDate(currentTime)}</DateText>
                 <TimeText dangerouslySetInnerHTML={{ __html: formatTime(currentTime) }} />
             </DateTimeContainer>
-            <IssueContainer>
-                <IssueText>국내 이슈들을 확인하고 공유해보세요!</IssueText>
-                <HotIssueBox>
-                    <HotIssueContainer>
-                        <HotIssueTitle>
-                            <span>실시간 게시글 Hot 3</span> <span>▲</span>
-                        </HotIssueTitle>
-                        <HotIssueList>
-                            <HotIssueItem>1. 오늘 대구 날씨 feat.대프리카</HotIssueItem>
-                            <HotIssueItem>2. 방이먹자골목에 싱크홀 생김</HotIssueItem>
-                            <HotIssueItem>3. 강남 쉑쉑쪽에 차사고남</HotIssueItem>
-                        </HotIssueList>
-                    </HotIssueContainer>
-                </HotIssueBox>
-            </IssueContainer>
+            {/*<IssueContainer>*/}
+            {/*    <IssueText>국내 이슈들을 확인하고 공유해보세요!</IssueText>*/}
+            {/*    <HotIssueBox>*/}
+            {/*        <HotIssueContainer>*/}
+            {/*            <HotIssueTitle>*/}
+            {/*                <span>실시간 게시글 Hot 3</span> <span>▲</span>*/}
+            {/*            </HotIssueTitle>*/}
+            {/*            <HotIssueList>*/}
+            {/*                <HotIssueItem>1. 오늘 대구 날씨 feat.대프리카</HotIssueItem>*/}
+            {/*                <HotIssueItem>2. 방이먹자골목에 싱크홀 생김</HotIssueItem>*/}
+            {/*                <HotIssueItem>3. 강남 쉑쉑쪽에 차사고남</HotIssueItem>*/}
+            {/*            </HotIssueList>*/}
+            {/*        </HotIssueContainer>*/}
+            {/*    </HotIssueBox>*/}
+            {/*</IssueContainer>*/}
         </Container>
     );
 };

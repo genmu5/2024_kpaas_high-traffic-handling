@@ -46,7 +46,7 @@ const formatDate = (dateString) => {
 
 const PostRow = (props) => {
     return (
-        <Container>
+        <Container onClick={props.onClick}>
             <PostTitleContainer>
                 <Text>
                     <HighlightText>#{props.region}</HighlightText>

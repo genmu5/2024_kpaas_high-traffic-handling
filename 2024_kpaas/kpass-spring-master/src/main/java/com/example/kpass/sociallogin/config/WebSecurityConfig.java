@@ -43,7 +43,10 @@ public class WebSecurityConfig {
                                                 "/",
                                                 "/api/v1/oauth2/**",
                                                 "/api/v1/posts",
-                                                "/api/shelters/**")
+                                                "/api/v1/posts/{postId}",
+                                                "/api/shelters/**",
+                                                "/api/v1/navernews/**",
+                                                "/api/v1/comments/{postId}")
                                         .permitAll()
                                         .requestMatchers("/api/v1/user/**")
                                         .hasRole("USER")

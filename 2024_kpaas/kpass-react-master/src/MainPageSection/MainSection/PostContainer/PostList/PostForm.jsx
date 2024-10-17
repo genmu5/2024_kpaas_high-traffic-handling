@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { executeCreatePost } from "../../../../api/AuthenticationApiService";
 
@@ -48,6 +48,14 @@ const PostForm = ({ onClose, onSubmit }) => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [region, setRegion] = useState("서울특별시");
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            setIsAuthenticated(true); // 토큰이 존재하면 인증된 것으로 간주
+        }
+    }, []);
 
     const regions = [
         "서울특별시",
@@ -71,6 +79,11 @@ const PostForm = ({ onClose, onSubmit }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!isAuthenticated) {
+            alert("로그인이 필요합니다. 로그인 후 다시 시도해주세요.");
+            return;
+        }
+
         try {
             const response = await executeCreatePost({
                 title,
@@ -79,10 +92,14 @@ const PostForm = ({ onClose, onSubmit }) => {
                 likeCount: 0
             });
             if (response.status === 200) {
-                onSubmit(); // 글 작성 후 게시글 목록 업데이트
-                onClose();  // 폼 닫기
+                alert("게시글이 성공적으로 저장되었습니다.");
+                onSubmit();
+                onClose();
+            } else {
+                alert("게시글 저장에 실패했습니다.");
             }
         } catch (error) {
+            alert("게시글 저장 중 오류가 발생했습니다.");
             console.error("Error creating post:", error);
         }
     };
