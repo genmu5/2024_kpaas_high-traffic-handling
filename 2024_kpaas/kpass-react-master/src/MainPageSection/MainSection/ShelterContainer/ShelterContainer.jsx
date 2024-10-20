@@ -30,7 +30,6 @@
 //
 //         script.onload = () => {
 //             if (window.naver) {
-//                 console.log('Naver maps script loaded');
 //                 const defaultCenter = new window.naver.maps.LatLng(37.554722, 126.970833); // 서울역 좌표
 //                 mapRef.current = new window.naver.maps.Map('map', {
 //                     center: defaultCenter,
@@ -43,13 +42,33 @@
 //                     },
 //                     mapDataControl: false,
 //                 });
+//
+//                 // 지도 경계가 변경될 때마다 데이터를 가져오는 로직 추가
+//                 window.naver.maps.Event.addListener(mapRef.current, 'bounds_changed', () => {
+//                     const bounds = mapRef.current.getBounds();
+//                     const southWest = bounds.getSW();
+//                     const northEast = bounds.getNE();
+//                     const zoomLevel = mapRef.current.getZoom();
+//
+//                     // 지진 대피소가 선택된 경우에만 경계 내 데이터를 다시 요청
+//                     if (activeIcon === 5) {
+//                         fetchSheltersInBounds(southWest, northEast, zoomLevel);  // 이 함수 호출로 변경
+//                     }
+//                 });
 //             }
 //         };
 //
 //         return () => {
 //             document.head.removeChild(script);
 //         };
-//     }, []);
+//     }, [activeIcon]);  // activeIcon이 변경될 때마다 해당 useEffect 실행
+//
+//
+//     const fetchSheltersInBounds = async (southWest, northEast, zoomLevel) => {
+//         console.log('Fetching shelters within bounds:', southWest, northEast, zoomLevel);
+//         const url = `/api/shelters?swLat=${southWest.lat()}&swLng=${southWest.lng()}&neLat=${northEast.lat()}&neLng=${northEast.lng()}&zoom=${zoomLevel}`;
+//         fetchShelters(url);
+//     };
 //
 //     useEffect(() => {
 //         if (mapRef.current && currentLocation.lat && currentLocation.lng) {
@@ -88,26 +107,37 @@
 //     const handleIconClick = (iconId) => {
 //         if (iconId === activeIcon) {
 //             setActiveIcon(null);
-//             toggleMarkers([]); // 활성화된 아이콘을 다시 클릭 시 마커 및 정보창 제거
+//             toggleMarkers([]);  // 활성화된 아이콘을 다시 클릭 시 마커 및 정보창 제거
 //         } else {
-//             setActiveIcon(iconId);
+//             setActiveIcon(iconId);  // 아이콘 활성화 상태 변경
 //             let apiUrl = '';
 //
-//             // 아이콘 ID에 따라 API URL 설정
+//             // 아이콘에 따라 API URL을 결정
 //             switch (iconId) {
 //                 case 1: apiUrl = '/api/shelters/landslide'; break;
 //                 case 2: apiUrl = '/api/shelters/chemical'; break;
 //                 case 3: apiUrl = '/api/shelters/civil-defense'; break;
 //                 case 4: apiUrl = '/api/shelters/disaster-victims'; break;
-//                 case 5: apiUrl = '/api/shelters/earthquake'; break;
+//                 case 5:
+//                     // 지진 대피소의 경우, 현재 지도의 경계 및 줌 정보를 사용
+//                     const bounds = mapRef.current.getBounds();
+//                     const southWest = bounds.getSW();
+//                     const northEast = bounds.getNE();
+//                     const zoomLevel = mapRef.current.getZoom();
+//
+//                     // 지도 중심을 변경하지 않고 데이터만 요청
+//                     apiUrl = `/api/shelters/earthquake?swLat=${southWest.lat()}&swLng=${southWest.lng()}&neLat=${northEast.lat()}&neLng=${northEast.lng()}&zoom=${zoomLevel}`;
+//                     break;
 //                 default: break;
 //             }
 //
+//             // URL이 정의되면 해당 URL로 데이터를 요청
 //             if (apiUrl) {
-//                 fetchShelters(apiUrl);
+//                 fetchShelters(apiUrl);  // 마커 데이터 요청
 //             }
 //         }
 //     };
+//
 //
 //     const toggleMarkers = (shelterData) => {
 //         console.log('Shelter data for markers:', shelterData);
@@ -177,8 +207,6 @@
 // };
 //
 // export default ShelterContainer;
-//
-//
 
 import React, { useRef, useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
@@ -212,7 +240,6 @@ const ShelterContainer = () => {
 
         script.onload = () => {
             if (window.naver) {
-                console.log('Naver maps script loaded');
                 const defaultCenter = new window.naver.maps.LatLng(37.554722, 126.970833); // 서울역 좌표
                 mapRef.current = new window.naver.maps.Map('map', {
                     center: defaultCenter,
@@ -231,9 +258,11 @@ const ShelterContainer = () => {
                     const bounds = mapRef.current.getBounds();
                     const southWest = bounds.getSW();
                     const northEast = bounds.getNE();
+                    const zoomLevel = mapRef.current.getZoom();
 
-                    // 경계 내 데이터 요청
-                    fetchSheltersInBounds(southWest, northEast);
+                    if (activeIcon === 5) {
+                        fetchSheltersInBounds(southWest, northEast, zoomLevel);
+                    }
                 });
             }
         };
@@ -241,11 +270,11 @@ const ShelterContainer = () => {
         return () => {
             document.head.removeChild(script);
         };
-    }, []);
+    }, []); // activeIcon 제거, 초기 로딩 시 한 번만 실행되도록
 
-    const fetchSheltersInBounds = async (southWest, northEast) => {
-        console.log('Fetching shelters within bounds:', southWest, northEast);
-        const url = `/api/shelters?swLat=${southWest.lat()}&swLng=${southWest.lng()}&neLat=${northEast.lat()}&neLng=${northEast.lng()}`;
+    const fetchSheltersInBounds = async (southWest, northEast, zoomLevel) => {
+        console.log('Fetching shelters within bounds:', southWest, northEast, zoomLevel);
+        const url = `/api/shelters?swLat=${southWest.lat()}&swLng=${southWest.lng()}&neLat=${northEast.lat()}&neLng=${northEast.lng()}&zoom=${zoomLevel}`;
         fetchShelters(url);
     };
 
@@ -286,18 +315,24 @@ const ShelterContainer = () => {
     const handleIconClick = (iconId) => {
         if (iconId === activeIcon) {
             setActiveIcon(null);
-            toggleMarkers([]); // 활성화된 아이콘을 다시 클릭 시 마커 및 정보창 제거
+            toggleMarkers([]);  // 활성화된 아이콘을 다시 클릭 시 마커 및 정보창 제거
         } else {
             setActiveIcon(iconId);
             let apiUrl = '';
 
-            // 아이콘 ID에 따라 API URL 설정
+            // 아이콘에 따라 API URL 결정
             switch (iconId) {
                 case 1: apiUrl = '/api/shelters/landslide'; break;
                 case 2: apiUrl = '/api/shelters/chemical'; break;
                 case 3: apiUrl = '/api/shelters/civil-defense'; break;
                 case 4: apiUrl = '/api/shelters/disaster-victims'; break;
-                case 5: apiUrl = '/api/shelters/earthquake'; break;
+                case 5:
+                    const bounds = mapRef.current.getBounds();
+                    const southWest = bounds.getSW();
+                    const northEast = bounds.getNE();
+                    const zoomLevel = mapRef.current.getZoom();
+                    apiUrl = `/api/shelters/earthquake?swLat=${southWest.lat()}&swLng=${southWest.lng()}&neLat=${northEast.lat()}&neLng=${northEast.lng()}&zoom=${zoomLevel}`;
+                    break;
                 default: break;
             }
 
@@ -375,3 +410,6 @@ const ShelterContainer = () => {
 };
 
 export default ShelterContainer;
+
+
+

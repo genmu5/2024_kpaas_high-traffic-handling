@@ -19,7 +19,7 @@ public class DisasterScheduler {
     }
 
     // 1.5분(90초)마다 getDisasters 메서드 호출
-    @Scheduled(fixedRate = 90000)
+    @Scheduled(fixedRate = 9000000) //원래 90000 이였는데 임시 숫자 수정
     public void scheduleDisasterFetch() {
         logger.info("스케줄러가 API를 호출합니다.");
         disasterController.getDisasters();
