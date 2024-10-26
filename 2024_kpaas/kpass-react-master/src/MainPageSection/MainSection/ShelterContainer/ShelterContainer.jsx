@@ -185,6 +185,7 @@ import { useRecoilValue } from 'recoil';
 import useCurrentLocation from '../../../hooks/useCurrentLocation';
 import { currentLocationAtom } from '../../../state/currentLocationAtom';
 
+
 const icons = [
     { id: 1, name: '산사태 대피소', icon: '🏔️' },
     { id: 2, name: '화학사고 대피소', icon: '🧪' },
@@ -245,7 +246,7 @@ const ShelterContainer = () => {
 
     const fetchSheltersInBounds = async (southWest, northEast) => {
         console.log('Fetching shelters within bounds:', southWest, northEast);
-        const url = `/api/shelters?swLat=${southWest.lat()}&swLng=${southWest.lng()}&neLat=${northEast.lat()}&neLng=${northEast.lng()}`;
+        const url = `http://default-backend-service-09278-100059673-08700d08cf31.kr.lb.naverncp.com:8080/api/shelters?swLat=${southWest.lat()}&swLng=${southWest.lng()}&neLat=${northEast.lat()}&neLng=${northEast.lng()}`;
         fetchShelters(url);
     };
 
@@ -293,12 +294,23 @@ const ShelterContainer = () => {
 
             // 아이콘 ID에 따라 API URL 설정
             switch (iconId) {
-                case 1: apiUrl = '/api/shelters/landslide'; break;
-                case 2: apiUrl = '/api/shelters/chemical'; break;
-                case 3: apiUrl = '/api/shelters/civil-defense'; break;
-                case 4: apiUrl = '/api/shelters/disaster-victims'; break;
-                case 5: apiUrl = '/api/shelters/earthquake'; break;
-                default: break;
+                case 1:
+                    apiUrl = `http://default-backend-service-09278-100059673-08700d08cf31.kr.lb.naverncp.com:8080/api/shelters/landslide`;
+                    break;
+                case 2:
+                    apiUrl = `http://default-backend-service-09278-100059673-08700d08cf31.kr.lb.naverncp.com:8080/api/shelters/chemical`;
+                    break;
+                case 3:
+                    apiUrl = `http://default-backend-service-09278-100059673-08700d08cf31.kr.lb.naverncp.com:8080/api/shelters/civil-defense`;
+                    break;
+                case 4:
+                    apiUrl = `http://default-backend-service-09278-100059673-08700d08cf31.kr.lb.naverncp.com:8080/api/shelters/disaster-victims`;
+                    break;
+                case 5:
+                    apiUrl = `http://default-backend-service-09278-100059673-08700d08cf31.kr.lb.naverncp.com:8080/api/shelters/earthquake`;
+                    break;
+                default:
+                    break;
             }
 
             if (apiUrl) {

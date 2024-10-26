@@ -268,5 +268,5 @@ gradle-app.setting
 ### Gradle Patch ###
 # Java heap dump
 *.hprof
-
+Dockerfile
 # End of https://www.toptal.com/developers/gitignore/api/react,windows,intellij,gradle,java,git,macos

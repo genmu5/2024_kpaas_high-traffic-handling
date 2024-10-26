@@ -32,7 +32,7 @@ const IssueContainer = () => {
         // API에서 재난 데이터 가져오기
         const fetchDisasterData = async () => {
             try {
-                const response = await fetch("/api/disasters/location");
+                const response = await fetch(`http://default-backend-service-09278-100059673-08700d08cf31.kr.lb.naverncp.com:8080/api/disasters/location`);
                 const data = await response.json();
                 console.log("Fetched disaster data:", data); // API 응답 로그 확인
                 setDisasterData(data);
