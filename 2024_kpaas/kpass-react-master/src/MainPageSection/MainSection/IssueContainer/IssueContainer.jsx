@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
+import styled from 'styled-components';
 import { useRecoilValue } from 'recoil';
 import useCurrentLocation from '../../../hooks/useCurrentLocation';
 import { currentLocationAtom } from '../../../state/currentLocationAtom';
@@ -20,6 +21,55 @@ const disasterColors = {
     "호우": 'lightgreen'
 };
 
+// 새로운 마커 스타일 정의
+const MarkerStyle = `
+    width: 24px; 
+    height: 24px; 
+    background-color: {color}; 
+    border-radius: 50%; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    color: #fff; 
+    font-size: 14px; 
+    font-weight: bold; 
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3); 
+    transition: transform 0.2s ease;
+`;
+
+// 중앙 부분만 스타일 변경
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 650px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    gap: 15px;
+    margin: 20px 0;
+`;
+
+const Title = styled.div`
+    font-size: 28px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+    text-align: left;
+    width: 100%;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 8px;
+`;
+
+const MapWrapper = styled.div`
+    width: 100%;
+    height: 500px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+`;
+
 const IssueContainer = () => {
     useCurrentLocation();
     const currentLocation = useRecoilValue(currentLocationAtom);
@@ -29,12 +79,11 @@ const IssueContainer = () => {
     const infoWindowsRef = useRef([]);
 
     useEffect(() => {
-        // API에서 재난 데이터 가져오기
         const fetchDisasterData = async () => {
             try {
                 const response = await fetch("/api/disasters/location");
                 const data = await response.json();
-                console.log("Fetched disaster data:", data); // API 응답 로그 확인
+                console.log("Fetched disaster data:", data);
                 setDisasterData(data);
             } catch (error) {
                 console.error("Error fetching disaster data:", error);
@@ -46,8 +95,6 @@ const IssueContainer = () => {
 
     useEffect(() => {
         const naverMapClientId = process.env.REACT_APP_NAVER_MAP_CLIENT_ID;
-
-        // 지도 스크립트 로드
         const script = document.createElement('script');
         script.src = `https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${naverMapClientId}&submodules=geocoder`;
         script.async = true;
@@ -77,7 +124,6 @@ const IssueContainer = () => {
 
     useEffect(() => {
         if (mapRef.current && disasterData.length > 0) {
-            // 기존 마커와 정보창 모두 제거
             markersRef.current.forEach(marker => marker.setMap(null));
             infoWindowsRef.current.forEach(infoWindow => infoWindow.close());
             markersRef.current = [];
@@ -85,32 +131,33 @@ const IssueContainer = () => {
 
             disasterData.forEach((disaster) => {
                 const { latitude, longitude, disasterType, regionName } = disaster;
-                const color = disasterColors[disasterType] || 'black'; // 재난 유형에 맞는 색상 선택
+                const color = disasterColors[disasterType] || 'black';
 
                 if (latitude && longitude) {
                     const position = new window.naver.maps.LatLng(latitude, longitude);
 
-                    // 마커에 색상만 적용
                     const marker = new window.naver.maps.Marker({
                         position,
                         map: mapRef.current,
                         title: `${disasterType} - ${regionName}`,
                         icon: {
-                            content: `<div style="width: 16px; height: 16px; background-color: ${color}; border-radius: 50%;"></div>`,
-                            anchor: new window.naver.maps.Point(8, 8), // 중앙에 위치시키기 위해 anchor 조정
+                            content: `<div style="${MarkerStyle.replace('{color}', color)}">
+                                          ${disasterType.charAt(0)}
+                                      </div>`,
+                            anchor: new window.naver.maps.Point(12, 12),
                         },
                     });
 
-                    // 색상 적용된 정보창 생성
                     const infoWindow = new window.naver.maps.InfoWindow({
-                        content: `<div style="padding:10px; background-color: ${color}; color: #ffffff; border-radius: 5px;">${disasterType} - ${regionName}</div>`,
-                        borderWidth: 0,  // 말풍선 테두리 제거
-                        backgroundColor: "transparent",  // 말풍선 외부 투명하게 설정
+                        content: `<div style="padding:10px; background-color: ${color}; color: #ffffff; border-radius: 5px;">
+                                      ${disasterType} - ${regionName}
+                                  </div>`,
+                        borderWidth: 0,
+                        backgroundColor: "transparent",
                     });
 
                     infoWindowsRef.current.push(infoWindow);
 
-                    // 마커 클릭 시 정보창 열고 닫기
                     let infoWindowOpen = false;
                     window.naver.maps.Event.addListener(marker, "click", () => {
                         if (infoWindowOpen) {
@@ -121,14 +168,13 @@ const IssueContainer = () => {
                         infoWindowOpen = !infoWindowOpen;
                     });
 
-                    // 마커 참조 저장
                     markersRef.current.push(marker);
                 } else {
                     console.warn(`Missing latitude or longitude for disaster: ${disasterType} at ${regionName}`);
                 }
             });
 
-            console.log("Markers created:", markersRef.current); // 마커 생성 여부 확인 로그
+            console.log("Markers created:", markersRef.current);
         }
     }, [disasterData]);
 
@@ -141,10 +187,10 @@ const IssueContainer = () => {
     }, [currentLocation]);
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '20px' }}>
-            <div style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '20px' }}>IssueContainer</div>
-            <div id="map" style={{ width: '650px', height: '500px' }}></div>
-        </div>
+        <Container>
+            <Title>지역별 이슈</Title>
+            <MapWrapper id="map"></MapWrapper>
+        </Container>
     );
 };
 
