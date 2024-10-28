@@ -8,6 +8,9 @@ function SocialLoginPage(){
         window.location.href = url;
     }
 
+    console.log("Naver URL:", naverUrl);
+    console.log("Google URL:", googleUrl);
+
     return(
         <>
             <h1>

@@ -47,7 +47,9 @@ public class WebSecurityConfig {
                                                 "/api/shelters/**",
                                                 "/api/disasters/**",
                                                 "/api/v1/navernews/**",
-                                                "/api/v1/comments/{postId}")
+                                                "/api/v1/comments/{postId}",
+                                                "/api/shelters?swLat={swLat}&swLng={swLng}&neLat={neLat}&neLng={neLng}" // 모든 사용자에게 허용
+                                        )
                                         .permitAll()
                                         .requestMatchers("/api/v1/user/**")
                                         .hasRole("USER")
