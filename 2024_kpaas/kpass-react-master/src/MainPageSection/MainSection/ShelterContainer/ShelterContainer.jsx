@@ -4,7 +4,6 @@ import { useRecoilValue } from 'recoil';
 import useCurrentLocation from '../../../hooks/useCurrentLocation';
 import { currentLocationAtom } from '../../../state/currentLocationAtom';
 
-
 const icons = [
     { id: 1, name: '산사태 대피소', icon: '🏔️' },
     { id: 2, name: '화학사고 대피소', icon: '🧪' },
@@ -51,9 +50,11 @@ const ShelterContainer = () => {
                     const bounds = mapRef.current.getBounds();
                     const southWest = bounds.getSW();
                     const northEast = bounds.getNE();
+                    const zoomLevel = mapRef.current.getZoom();
 
-                    // 경계 내 데이터 요청
-                    fetchSheltersInBounds(southWest, northEast);
+                    if (activeIcon) {
+                        fetchSheltersInBounds(southWest, northEast, zoomLevel);
+                    }
                 });
             }
         };
@@ -63,9 +64,9 @@ const ShelterContainer = () => {
         };
     }, []);
 
-    const fetchSheltersInBounds = async (southWest, northEast) => {
-        console.log('Fetching shelters within bounds:', southWest, northEast);
-        const url = `http://default-backend-service-09278-100059673-08700d08cf31.kr.lb.naverncp.com:8080/api/shelters?swLat=${southWest.lat()}&swLng=${southWest.lng()}&neLat=${northEast.lat()}&neLng=${northEast.lng()}`;
+    const fetchSheltersInBounds = async (southWest, northEast, zoomLevel) => {
+        console.log('Fetching shelters within bounds:', southWest, northEast, zoomLevel);
+        const url = `http://localhost:8080/api/shelters?swLat=${southWest.lat()}&swLng=${southWest.lng()}&neLat=${northEast.lat()}&neLng=${northEast.lng()}&zoom=${zoomLevel}`;
         fetchShelters(url);
     };
 
@@ -114,20 +115,35 @@ const ShelterContainer = () => {
             // 아이콘 ID에 따라 API URL 설정
             switch (iconId) {
                 case 1:
-                    apiUrl = `http://default-backend-service-09278-100059673-08700d08cf31.kr.lb.naverncp.com:8080/api/shelters/landslide`;
+                    apiUrl = `http://localhost:8080/api/shelters/landslide`;
                     break;
                 case 2:
-                    apiUrl = `http://default-backend-service-09278-100059673-08700d08cf31.kr.lb.naverncp.com:8080/api/shelters/chemical`;
+                    apiUrl = `http://localhost:8080/api/shelters/chemical`;
                     break;
-                case 3:
-                    apiUrl = `http://default-backend-service-09278-100059673-08700d08cf31.kr.lb.naverncp.com:8080/api/shelters/civil-defense`;
+                case 3: {
+                    const bounds = mapRef.current.getBounds();
+                    const southWest = bounds.getSW();
+                    const northEast = bounds.getNE();
+                    const zoomLevel = mapRef.current.getZoom();
+                    apiUrl = `http://localhost:8080/api/shelters/civil-defense?swLat=${southWest.lat()}&swLng=${southWest.lng()}&neLat=${northEast.lat()}&neLng=${northEast.lng()}&zoom=${zoomLevel}`;
                     break;
-                case 4:
-                    apiUrl = `http://default-backend-service-09278-100059673-08700d08cf31.kr.lb.naverncp.com:8080/api/shelters/disaster-victims`;
+                }
+                case 4: {
+                    const bounds = mapRef.current.getBounds();
+                    const southWest = bounds.getSW();
+                    const northEast = bounds.getNE();
+                    const zoomLevel = mapRef.current.getZoom();
+                    apiUrl = `http://localhost:8080/api/shelters/disaster-victims?swLat=${southWest.lat()}&swLng=${southWest.lng()}&neLat=${northEast.lat()}&neLng=${northEast.lng()}&zoom=${zoomLevel}`;
                     break;
-                case 5:
-                    apiUrl = `http://default-backend-service-09278-100059673-08700d08cf31.kr.lb.naverncp.com:8080/api/shelters/earthquake`;
+                }
+                case 5:{
+                    const bounds = mapRef.current.getBounds();
+                    const southWest = bounds.getSW();
+                    const northEast = bounds.getNE();
+                    const zoomLevel = mapRef.current.getZoom();
+                    apiUrl = `http://localhost:8080/api/shelters/earthquake?swLat=${southWest.lat()}&swLng=${southWest.lng()}&neLat=${northEast.lat()}&neLng=${northEast.lng()}&zoom=${zoomLevel}`;
                     break;
+                }
                 default:
                     break;
             }
@@ -204,6 +220,9 @@ const ShelterContainer = () => {
         </div>
     );
 };
+
+export default ShelterContainer;
+
 
 // export default ShelterContainer;
 // import React, { useRef, useEffect, useState } from 'react';

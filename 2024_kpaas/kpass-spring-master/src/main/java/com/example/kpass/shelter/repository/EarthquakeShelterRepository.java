@@ -1,6 +1,7 @@
 package com.example.kpass.shelter.repository;
 
 import com.example.kpass.shelter.entity.EarthquakeShelter;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,7 +11,12 @@ import java.util.List;
 
 @Repository
 public interface EarthquakeShelterRepository extends JpaRepository<EarthquakeShelter, Long> {
-
-    @Query(value = "SELECT * FROM earthquake_shelters WHERE lat BETWEEN :swLat AND :neLat AND lng BETWEEN :swLng AND :neLng ORDER BY capacity DESC LIMIT 30", nativeQuery = true)
-    List<EarthquakeShelter> findTop30WithinBounds(@Param("swLat") double swLat, @Param("swLng") double swLng, @Param("neLat") double neLat, @Param("neLng") double neLng);
+    @Query("SELECT s FROM EarthquakeShelter s WHERE s.lat BETWEEN :swLat AND :neLat AND s.lng BETWEEN :swLng AND :neLng ORDER BY s.capacity DESC")
+    List<EarthquakeShelter> findTopSheltersByCapacity(
+            @Param("swLat") double swLat,
+            @Param("neLat") double neLat,
+            @Param("swLng") double swLng,
+            @Param("neLng") double neLng,
+            Pageable pageable
+    );
 }
