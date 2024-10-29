@@ -16,43 +16,33 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-//    runtimeOnly 'com.h2database:h2'  // H2 데이터베이스 사용 시 이 의존성 추가
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    testImplementation 'org.hamcrest:hamcrest:2.2'
-    //jakarta.persistence 의존성
+    // Spring Boot 기본 의존성
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    // Lombok 의존성
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    implementation 'org.apache.poi:poi:5.2.3'
+    implementation 'org.apache.poi:poi-ooxml:5.2.3'
+
+    // JWT 관련 의존성
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+    // Lombok
     compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
 
-    // Spring Security 기본 의존성
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-//    // 스케줄링 관련 의존성 (버전 생략)
-//    implementation 'org.springframework.boot:spring-boot-starter-scheduling'
-
-    //액셀파일 관련
-    implementation 'org.apache.poi:poi:5.2.3' // HSSF (XLS) 포맷을 지원
-    implementation 'org.apache.poi:poi-ooxml:5.2.3' // XSSF (XLSX) 포맷을 지원
-
-    // OAuth2 Client 의존성
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-
-    //jwt 의존성
-    implementation group:'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
-    implementation group:'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
-    implementation group:'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
-
-    //mysql
-//    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    // MySQL 의존성
     runtimeOnly 'com.mysql:mysql-connector-j'
-    implementation 'mysql:mysql-connector-java:8.0.32'
 
-    //json parse
+    // JSON 파싱 관련
     implementation 'org.jsoup:jsoup:1.15.3'
+
+    // 테스트 관련 의존성
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'org.hamcrest:hamcrest:2.2'
 }
 
 tasks.named('test') {

@@ -1,7 +1,9 @@
+
 // import React, { useRef, useEffect, useState } from 'react';
 // import { useRecoilValue } from 'recoil';
 // import useCurrentLocation from '../../../hooks/useCurrentLocation';
 // import { currentLocationAtom } from '../../../state/currentLocationAtom';
+//
 //
 // const icons = [
 //     { id: 1, name: '산사태 대피소', icon: '🏔️' },
@@ -43,6 +45,16 @@
 //                     },
 //                     mapDataControl: false,
 //                 });
+//
+//                 // 지도 경계가 변경될 때마다 데이터를 가져오는 로직 추가
+//                 window.naver.maps.Event.addListener(mapRef.current, 'bounds_changed', () => {
+//                     const bounds = mapRef.current.getBounds();
+//                     const southWest = bounds.getSW();
+//                     const northEast = bounds.getNE();
+//
+//                     // 경계 내 데이터 요청
+//                     fetchSheltersInBounds(southWest, northEast);
+//                 });
 //             }
 //         };
 //
@@ -50,6 +62,12 @@
 //             document.head.removeChild(script);
 //         };
 //     }, []);
+//
+//     const fetchSheltersInBounds = async (southWest, northEast) => {
+//         console.log('Fetching shelters within bounds:', southWest, northEast);
+//         const url = `http://default-backend-service-09278-100059673-08700d08cf31.kr.lb.naverncp.com:8080/api/shelters?swLat=${southWest.lat()}&swLng=${southWest.lng()}&neLat=${northEast.lat()}&neLng=${northEast.lng()}`;
+//         fetchShelters(url);
+//     };
 //
 //     useEffect(() => {
 //         if (mapRef.current && currentLocation.lat && currentLocation.lng) {
@@ -95,12 +113,23 @@
 //
 //             // 아이콘 ID에 따라 API URL 설정
 //             switch (iconId) {
-//                 case 1: apiUrl = '/api/shelters/landslide'; break;
-//                 case 2: apiUrl = '/api/shelters/chemical'; break;
-//                 case 3: apiUrl = '/api/shelters/civil-defense'; break;
-//                 case 4: apiUrl = '/api/shelters/disaster-victims'; break;
-//                 case 5: apiUrl = '/api/shelters/earthquake'; break;
-//                 default: break;
+//                 case 1:
+//                     apiUrl = `http://default-backend-service-09278-100059673-08700d08cf31.kr.lb.naverncp.com:8080/api/shelters/landslide`;
+//                     break;
+//                 case 2:
+//                     apiUrl = `http://default-backend-service-09278-100059673-08700d08cf31.kr.lb.naverncp.com:8080/api/shelters/chemical`;
+//                     break;
+//                 case 3:
+//                     apiUrl = `http://default-backend-service-09278-100059673-08700d08cf31.kr.lb.naverncp.com:8080/api/shelters/civil-defense`;
+//                     break;
+//                 case 4:
+//                     apiUrl = `http://default-backend-service-09278-100059673-08700d08cf31.kr.lb.naverncp.com:8080/api/shelters/disaster-victims`;
+//                     break;
+//                 case 5:
+//                     apiUrl = `http://default-backend-service-09278-100059673-08700d08cf31.kr.lb.naverncp.com:8080/api/shelters/earthquake`;
+//                     break;
+//                 default:
+//                     break;
 //             }
 //
 //             if (apiUrl) {
@@ -177,14 +206,10 @@
 // };
 //
 // export default ShelterContainer;
-//
-//
-
 import React, { useRef, useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import useCurrentLocation from '../../../hooks/useCurrentLocation';
 import { currentLocationAtom } from '../../../state/currentLocationAtom';
-
 
 const icons = [
     { id: 1, name: '산사태 대피소', icon: '🏔️' },
@@ -214,7 +239,7 @@ const ShelterContainer = () => {
         script.onload = () => {
             if (window.naver) {
                 console.log('Naver maps script loaded');
-                const defaultCenter = new window.naver.maps.LatLng(37.554722, 126.970833); // 서울역 좌표
+                const defaultCenter = new window.naver.maps.LatLng(37.554722, 126.970833);
                 mapRef.current = new window.naver.maps.Map('map', {
                     center: defaultCenter,
                     zoom: 7,
@@ -227,13 +252,11 @@ const ShelterContainer = () => {
                     mapDataControl: false,
                 });
 
-                // 지도 경계가 변경될 때마다 데이터를 가져오는 로직 추가
                 window.naver.maps.Event.addListener(mapRef.current, 'bounds_changed', () => {
                     const bounds = mapRef.current.getBounds();
                     const southWest = bounds.getSW();
                     const northEast = bounds.getNE();
 
-                    // 경계 내 데이터 요청
                     fetchSheltersInBounds(southWest, northEast);
                 });
             }
@@ -245,9 +268,9 @@ const ShelterContainer = () => {
     }, []);
 
     const fetchSheltersInBounds = async (southWest, northEast) => {
-        console.log('Fetching shelters within bounds:', southWest, northEast);
-        const url = `http://default-backend-service-09278-100059673-08700d08cf31.kr.lb.naverncp.com:8080/api/shelters?swLat=${southWest.lat()}&swLng=${southWest.lng()}&neLat=${northEast.lat()}&neLng=${northEast.lng()}`;
-        fetchShelters(url);
+        const url = `${process.env.REACT_APP_SERVER_URL}/api/shelters?swLat=${southWest.lat()}&swLng=${southWest.lng()}&neLat=${northEast.lat()}&neLng=${northEast.lng()}`;
+        console.log("Generated URL:", url);
+        await fetchShelters(url);
     };
 
     useEffect(() => {
@@ -260,7 +283,6 @@ const ShelterContainer = () => {
 
     useEffect(() => {
         if (shelters.length > 0) {
-            console.log('Updating markers with shelter data:', shelters);
             toggleMarkers(shelters);
         }
     }, [shelters]);
@@ -277,7 +299,6 @@ const ShelterContainer = () => {
             });
             if (!response.ok) throw new Error('Failed to fetch data');
             const data = await response.json();
-            console.log('Fetched shelters data:', data);
             setShelters(data);
         } catch (error) {
             console.error('Error fetching shelter data:', error);
@@ -287,27 +308,26 @@ const ShelterContainer = () => {
     const handleIconClick = (iconId) => {
         if (iconId === activeIcon) {
             setActiveIcon(null);
-            toggleMarkers([]); // 활성화된 아이콘을 다시 클릭 시 마커 및 정보창 제거
+            toggleMarkers([]);
         } else {
             setActiveIcon(iconId);
             let apiUrl = '';
 
-            // 아이콘 ID에 따라 API URL 설정
             switch (iconId) {
                 case 1:
-                    apiUrl = `http://default-backend-service-09278-100059673-08700d08cf31.kr.lb.naverncp.com:8080/api/shelters/landslide`;
+                    apiUrl = `${process.env.REACT_APP_SERVER_URL}/api/shelters/landslide`;
                     break;
                 case 2:
-                    apiUrl = `http://default-backend-service-09278-100059673-08700d08cf31.kr.lb.naverncp.com:8080/api/shelters/chemical`;
+                    apiUrl = `${process.env.REACT_APP_SERVER_URL}/api/shelters/chemical`;
                     break;
                 case 3:
-                    apiUrl = `http://default-backend-service-09278-100059673-08700d08cf31.kr.lb.naverncp.com:8080/api/shelters/civil-defense`;
+                    apiUrl = `${process.env.REACT_APP_SERVER_URL}/api/shelters/civil-defense`;
                     break;
                 case 4:
-                    apiUrl = `http://default-backend-service-09278-100059673-08700d08cf31.kr.lb.naverncp.com:8080/api/shelters/disaster-victims`;
+                    apiUrl = `${process.env.REACT_APP_SERVER_URL}/api/shelters/disaster-victims`;
                     break;
                 case 5:
-                    apiUrl = `http://default-backend-service-09278-100059673-08700d08cf31.kr.lb.naverncp.com:8080/api/shelters/earthquake`;
+                    apiUrl = `${process.env.REACT_APP_SERVER_URL}/api/shelters/earthquake`;
                     break;
                 default:
                     break;
@@ -320,7 +340,6 @@ const ShelterContainer = () => {
     };
 
     const toggleMarkers = (shelterData) => {
-        console.log('Shelter data for markers:', shelterData);
         markersRef.current.forEach(marker => marker.setMap(null));
         activeInfoWindows.forEach(infoWindow => infoWindow.close());
         markersRef.current = [];
@@ -328,7 +347,6 @@ const ShelterContainer = () => {
 
         if (shelterData.length > 0) {
             shelterData.forEach((shelter) => {
-                console.log('Creating marker at:', shelter.lat, shelter.lng);
                 const marker = new window.naver.maps.Marker({
                     position: new window.naver.maps.LatLng(shelter.lat, shelter.lng),
                     map: mapRef.current,
@@ -387,3 +405,4 @@ const ShelterContainer = () => {
 };
 
 export default ShelterContainer;
+
