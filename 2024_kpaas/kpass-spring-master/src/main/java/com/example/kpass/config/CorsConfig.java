@@ -15,19 +15,19 @@ public class CorsConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        // ConfigMap에서 가져온 도메인 값을 쉼표(,)로 구분하여 배열로 변환
+        // ConfigMap에서 가져온 도메인 값을 쉼표(,)로 구분하여 배열로 변환하고 추가 도메인 합치기
         String[] originsArray = allowedOrigins.split(",");
-        registry.addMapping("/api/**")
-                .allowedOrigins(originsArray)
+
+        // 고정 도메인을 originsArray에 추가
+        String[] combinedOrigins = new String[originsArray.length + 1];
+        System.arraycopy(originsArray, 0, combinedOrigins, 0, originsArray.length);
+        combinedOrigins[originsArray.length] = "http://211.188.51.114";
+
+        registry.addMapping("/**")
+                .allowedOrigins(combinedOrigins)  // 모든 허용된 도메인 설정
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
-                .allowCredentials(true);
-//건무오빠가 해둔거
-//        registry.addMapping("/api/**")
-//                .allowedOrigins(originsArray)  // ConfigMap에서 가져온 동적 도메인 사용
-//                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-//                .allowedHeaders("*")
-//                .allowCredentials(true);  // 인증 정보를 포함한 요청 허용
+                .allowCredentials(true);  // 인증 정보를 포함한 요청 허용
     }
 
     @PostConstruct
