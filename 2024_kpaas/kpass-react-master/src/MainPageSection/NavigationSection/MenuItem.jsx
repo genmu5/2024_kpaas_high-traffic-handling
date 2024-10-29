@@ -9,6 +9,7 @@ const Container = styled.div`
     padding: 5px 8px;
     border-radius: 16px;
     cursor: pointer;
+    margin-top: 8px;
     transition: background-color 0.3s, transform 0.3s;
 
     ${({ selected }) =>

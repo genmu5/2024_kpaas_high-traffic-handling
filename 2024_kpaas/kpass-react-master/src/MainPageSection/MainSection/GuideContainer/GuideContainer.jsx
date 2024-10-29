@@ -8,9 +8,20 @@ const Container = styled.div`
     justify-content: flex-start;
     width: 630px;
     height: auto;
-    margin: 0 10px 0 10px;
+    margin: 20px 10px 0 10px; /* 상단 여백을 20px로 설정 */
     gap: 10px;
 `;
+
+const Title = styled.h1`
+    font-size: 28px; /* Set the desired font size */
+    font-weight: 600; /* Set the desired font weight */
+    color: #333; /* Set the desired color */
+    text-align: left;
+    width: 100%;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 8px;
+`;
+
 
 const GuideContainer = () => {
     const [selectedTopic, setSelectedTopic] = useState(null);
@@ -62,7 +73,7 @@ const GuideContainer = () => {
 
     return (
         <Container>
-            <h1>재난 가이드</h1>
+            <Title>재난 가이드</Title>
             <HeadTable onItemClick={handleItemClick}/>
             <div>
                 {renderGuide()}
