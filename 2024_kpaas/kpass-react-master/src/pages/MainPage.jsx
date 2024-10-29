@@ -15,27 +15,25 @@ const Container = styled.div`
 const MainPage = () => {
     const [selectedMenu, setSelectedMenu] = useState('home');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const navigate = useNavigate();  // 페이지 이동을 위한 useNavigate 훅
+    const navigate = useNavigate();
 
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
-        const token = urlParams.get('token');  // URL에서 'token' 추출
+        const token = urlParams.get('token'); // URL에서 'token' 추출
 
         if (token) {
-            localStorage.setItem('token', token);  // localStorage에 토큰 저장
-            setIsLoggedIn(true);  // 로그인 상태로 설정
+            localStorage.setItem('token', token); // localStorage에 토큰 저장
+            setIsLoggedIn(true);
 
-            // URL에서 토큰 제거
             const url = new URL(window.location);
             url.searchParams.delete('token');
-            window.history.pushState({}, '', url);  // 페이지 새로고침 없이 URL 업데이트
+            window.history.pushState({}, '', url);
         } else if (localStorage.getItem('token')) {
-            setIsLoggedIn(true);  // localStorage에 토큰이 존재하는 경우 로그인 상태로 설정
+            setIsLoggedIn(true); // localStorage에 토큰이 존재하는 경우 로그인 상태로 설정
         } else {
-            setIsLoggedIn(false);  // 토큰이 없는 경우 로그아웃 상태
+            setIsLoggedIn(false); // 토큰이 없는 경우 로그아웃 상태
         }
     }, []);
-
 
     return (
         <div>

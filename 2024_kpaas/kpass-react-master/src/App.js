@@ -8,6 +8,8 @@ import "./App.css";
 import MainPage from "./pages/MainPage";
 import HomePage from "./pages/HomePage";
 import SocialLoginPage from "./pages/SocialLoginPage";
+import LoginPage from "./pages/LoginPage";
+import SignUpPage from "./pages/SignUpPage";
 
 function App() {
     return (
@@ -15,8 +17,8 @@ function App() {
             <Router>
                 <Routes>
                     <Route path='/' element={<MainPage />}/>
-                    {/* HomePage 경로 추가 */}
-                    <Route path="/login" element={<SocialLoginPage />} />
+                    <Route path='/login' element={<LoginPage />} />  {/* 로그인 페이지 경로 */}
+                    <Route path='/signup' element={<SignUpPage />} />  {/* 회원가입 페이지 경로 */}
                 </Routes>
             </Router>
         </RecoilRoot>
