@@ -40,7 +40,7 @@ const SignUpPage = () => {
     const handleSignUp = async () => {
         if (password === rePassword) {
             try {
-                const response = await fetch("http://localhost:8080/api/v1/auth/register", {
+                const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/v1/auth/register`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
@@ -52,9 +52,9 @@ const SignUpPage = () => {
                 });
 
                 if (response.ok) {
-                    const message = await response.text(); // 응답을 텍스트로 처리
+                    const message = await response.text();
                     if (message === "User registered successfully") {
-                        navigate("/login"); // 회원가입 성공 시 로그인 페이지로 이동
+                        navigate("/login");
                     } else {
                         alert("회원가입 실패: " + message);
                     }
@@ -68,6 +68,7 @@ const SignUpPage = () => {
             alert("비밀번호가 일치하지 않습니다!");
         }
     };
+
 
 
     return (

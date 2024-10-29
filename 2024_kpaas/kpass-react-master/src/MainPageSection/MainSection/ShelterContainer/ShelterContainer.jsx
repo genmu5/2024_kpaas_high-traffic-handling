@@ -268,7 +268,7 @@ const ShelterContainer = () => {
     }, []);
 
     const fetchSheltersInBounds = async (southWest, northEast) => {
-        const url = `http://localhost:8080/api/shelters?swLat=${southWest.lat()}&swLng=${southWest.lng()}&neLat=${northEast.lat()}&neLng=${northEast.lng()}`;
+        const url = `${process.env.REACT_APP_SERVER_URL}/api/shelters?swLat=${southWest.lat()}&swLng=${southWest.lng()}&neLat=${northEast.lat()}&neLng=${northEast.lng()}`;
         console.log("Generated URL:", url);
         await fetchShelters(url);
     };
@@ -315,19 +315,19 @@ const ShelterContainer = () => {
 
             switch (iconId) {
                 case 1:
-                    apiUrl = `http://localhost:8080/api/shelters/landslide`;
+                    apiUrl = `${process.env.REACT_APP_SERVER_URL}/api/shelters/landslide`;
                     break;
                 case 2:
-                    apiUrl = `http://localhost:8080/api/shelters/chemical`;
+                    apiUrl = `${process.env.REACT_APP_SERVER_URL}/api/shelters/chemical`;
                     break;
                 case 3:
-                    apiUrl = `http://localhost:8080/api/shelters/civil-defense`;
+                    apiUrl = `${process.env.REACT_APP_SERVER_URL}/api/shelters/civil-defense`;
                     break;
                 case 4:
-                    apiUrl = `http://localhost:8080/api/shelters/disaster-victims`;
+                    apiUrl = `${process.env.REACT_APP_SERVER_URL}/api/shelters/disaster-victims`;
                     break;
                 case 5:
-                    apiUrl = `http://localhost:8080/api/shelters/earthquake`;
+                    apiUrl = `${process.env.REACT_APP_SERVER_URL}/api/shelters/earthquake`;
                     break;
                 default:
                     break;

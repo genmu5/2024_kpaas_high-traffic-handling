@@ -37,16 +37,16 @@ const LoginPage = () => {
 
     const handleLogin = async () => {
         try {
-            const response = await fetch("http://localhost:8080/api/v1/auth/login", {
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/api/v1/auth/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email: username, password: password }), // 이메일과 비밀번호 전송
+                body: JSON.stringify({ email: username, password: password }),
             });
 
             if (response.ok) {
                 const data = await response.json();
-                localStorage.setItem("token", data.token); // JWT 토큰을 로컬 스토리지에 저장
-                navigate("/"); // 로그인 성공 시 메인 페이지로 이동
+                localStorage.setItem("token", data.token);
+                navigate("/");
             } else {
                 alert("로그인 실패");
             }
