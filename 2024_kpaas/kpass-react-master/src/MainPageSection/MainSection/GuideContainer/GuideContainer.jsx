@@ -42,28 +42,28 @@ const GuideContainer = () => {
             case '태풍':
                 return <img src={process.env.PUBLIC_URL + "/images/국민행동요령_태풍호우.jpg"} alt="태풍행동강령" style={{ width: '100%', height: 'auto' }} />;
             case '지진':
-                return <img src={process.env.PUBLIC_URL + "/images/지진.png"} alt="지진행동강령" style={{ width: '100%', height: 'auto' }} />;
+                return <img src={process.env.PUBLIC_URL + "/images/지진.PNG"} alt="지진행동강령" style={{ width: '100%', height: 'auto' }} />;
             case '홍수':
-                return <img src={process.env.PUBLIC_URL + "/images/홍수.png"} alt="홍수행동강령" style={{ width: '100%', height: 'auto' }} />;
+                return <img src={process.env.PUBLIC_URL + "/images/홍수.PNG"} alt="홍수행동강령" style={{ width: '100%', height: 'auto' }} />;
             case '대설':
                 return <img src={process.env.PUBLIC_URL + "/images/대설.jpg"} alt="대설행동강령" style={{ width: '100%', height: 'auto' }} />;
             case '낙뢰':
-                return <img src={process.env.PUBLIC_URL + "/images/낙뢰.png"} alt="낙뢰행동강령" style={{ width: '100%', height: 'auto' }} />;
+                return <img src={process.env.PUBLIC_URL + "/images/낙뢰.PNG"} alt="낙뢰행동강령" style={{ width: '100%', height: 'auto' }} />;
             case '해일':
-                return <img src={process.env.PUBLIC_URL + "/images/해일.png"} alt="해일행동강령" style={{ width: '100%', height: 'auto' }} />;
+                return <img src={process.env.PUBLIC_URL + "/images/해일.PNG"} alt="해일행동강령" style={{ width: '100%', height: 'auto' }} />;
             case '우주물체 추락_충돌':
-                return <img src={process.env.PUBLIC_URL + "/images/우주물체.png"} alt="우주물체 추락_충돌행동강령" style={{ width: '100%', height: 'auto' }} />;
+                return <img src={process.env.PUBLIC_URL + "/images/우주물체.PNG"} alt="우주물체 추락_충돌행동강령" style={{ width: '100%', height: 'auto' }} />;
             case '폭염':
-                return <img src={process.env.PUBLIC_URL + "/images/폭염.png"} alt="폭염행동강령" style={{ width: '100%', height: 'auto' }} />;
+                return <img src={process.env.PUBLIC_URL + "/images/폭염.PNG"} alt="폭염행동강령" style={{ width: '100%', height: 'auto' }} />;
             case '한파':
                 return <img src={process.env.PUBLIC_URL + "/images/한파.jpg"} alt="한파행동강령" style={{ width: '100%', height: 'auto' }} />;
             case '가뭄':
-                return <img src={process.env.PUBLIC_URL + "/images/가뭄.png"} alt="가뭄행동강령" style={{ width: '100%', height: 'auto' }} />;
+                return <img src={process.env.PUBLIC_URL + "/images/가뭄.PNG"} alt="가뭄행동강령" style={{ width: '100%', height: 'auto' }} />;
             case '우주전파':
                 return (
                     <div>
-                        <img src={process.env.PUBLIC_URL + "/images/우주전파_1.png"} alt="우주전파행동강령" style={{ width: '100%', height: 'auto' }} />;
-                        <img src={process.env.PUBLIC_URL + "/images/우주전파_2.png"} alt="우주전파행동강령" style={{ width: '100%', height: 'auto' }} />;
+                        <img src={process.env.PUBLIC_URL + "/images/우주전파_1.PNG"} alt="우주전파행동강령" style={{ width: '100%', height: 'auto' }} />;
+                        <img src={process.env.PUBLIC_URL + "/images/우주전파_2.PNG"} alt="우주전파행동강령" style={{ width: '100%', height: 'auto' }} />;
                     </div>
                 );
             default:
