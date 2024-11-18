@@ -81,7 +81,7 @@ const IssueContainer = () => {
     useEffect(() => {
         const fetchDisasterData = async () => {
             try {
-                const response = await fetch(`http://default-backend-service-09278-100059673-08700d08cf31.kr.lb.naverncp.com:8080/api/disasters/location`);
+                const response = await fetch(`http://211.188.55.193:8080/api/disasters/location`);
                 const data = await response.json();
                 console.log("Fetched disaster data:", data);
                 setDisasterData(data);

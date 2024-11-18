@@ -21,7 +21,7 @@ public class CorsConfig implements WebMvcConfigurer {
         // 고정 도메인을 originsArray에 추가
         String[] combinedOrigins = new String[originsArray.length + 1];
         System.arraycopy(originsArray, 0, combinedOrigins, 0, originsArray.length);
-        combinedOrigins[originsArray.length] = "http://211.188.51.114";
+        combinedOrigins[originsArray.length] = "http://211.188.49.195";
 
         registry.addMapping("/**")
                 .allowedOrigins(combinedOrigins)  // 모든 허용된 도메인 설정
