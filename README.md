@@ -9,6 +9,9 @@ Kafka를 통한 비동기 처리와 클라우드의 오토 스케일링을 통�
 서비스 제공이 가능하도록 설계됩니다. 최종적으로 본 시스템은 다른 유사 서비스에도 적용할 수 있도록
 오픈소스로 배포하여 재난 상황 시 여러 커뮤니티에서 효과적으로 활용될 수 있도록 기여하고자 합니다.
 
+## 개발 기간
+2024.08 ~ 2024.10.31
+
 ## 주요 기능
 - 실시간 글쓰기 및 댓글 기능
 - 실시간 재난뉴스 제공 기능
@@ -28,3 +31,5 @@ Kafka를 통한 비동기 처리와 클라우드의 오토 스케일링을 통�
 - React
 - Grafana
 - JMeter
+
+![Footer](https://capsule-render.vercel.app/api?type=waving&color=timeGradient&height=200&section=footer)
